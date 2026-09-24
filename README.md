@@ -15,7 +15,7 @@
 
 ```bash
 # 1. 填 key
-cp .env.example .env   # 填入 DEEPSEEK_API_KEY 和 TAVILY_API_KEY
+cp .env.example .env   # 填入 AI_KEY 和 TAVILY_API_KEY
 
 # 2. 运行
 python research.py

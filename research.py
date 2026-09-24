@@ -38,10 +38,10 @@ def init_config() -> None:
     TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "")
 
 
-# ------------------------- LLM (DeepSeek) -------------------------
+# ------------------------- LLM-------------------------
 
 def _chat(messages: list[dict], temperature: float) -> str:
-    """调用 DeepSeek Chat Completions API，返回回复文本。"""
+    """调用 AI API，返回回复文本。"""
     body = json.dumps({
         "model": AI_MODEL,
         "messages": messages,
@@ -61,7 +61,7 @@ def _chat(messages: list[dict], temperature: float) -> str:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"DeepSeek API 报错 {e.code}: {detail[:500]}") from e
+        raise RuntimeError(f"AI API 报错 {e.code}: {detail[:500]}") from e
     return data["choices"][0]["message"]["content"]
 
 
