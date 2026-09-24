@@ -42,28 +42,46 @@ def init_config() -> None:
 
 def _chat(messages: list[dict], temperature: float) -> str:
     """调用 AI API，返回回复文本。"""
+    # 1. 规范化 Base URL，去除末尾斜杠
+    base_url = AI_BASE_URL.rstrip("/")
+    # 如果已填 /v1 则直接拼接，避免重复
+    if not base_url.endswith("/v1") and not base_url.endswith("/chat/completions"):
+        # 大多数兼容 OpenAI 规范的端点需要 /v1
+        # 若是 DeepSeek 官方直接用 https://api.deepseek.com/chat/completions，保留兼容性
+        target_url = f"{base_url}/chat/completions"
+    elif base_url.endswith("/chat/completions"):
+        target_url = base_url
+    else:
+        target_url = f"{base_url}/chat/completions"
+
     body = json.dumps({
         "model": AI_MODEL,
         "messages": messages,
         "temperature": temperature,
     }).encode("utf-8")
-    req = urllib.request.Request(
-        f"{AI_BASE_URL}/chat/completions",
-        data=body,
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {AI_API_KEY}",
-        },
-        method="POST",
-    )
+
+    # 2. 伪装标准浏览器 User-Agent，避免被防火墙秒断
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {AI_API_KEY}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    }
+
+    req = urllib.request.Request(target_url, data=body, headers=headers, method="POST")
+
+    # 3. 扩大捕获范围，捕获断连和网络错误
     try:
         with urllib.request.urlopen(req, timeout=120) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"AI API 报错 {e.code}: {detail[:500]}") from e
-    return data["choices"][0]["message"]["content"]
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"网络连接失败 (请求地址: {target_url}): {e.reason}") from e
+    except Exception as e:
+        raise RuntimeError(f"请求发生异常 (请求地址: {target_url}): {e}") from e
 
+    return data["choices"][0]["message"]["content"]
 
 def _parse_json_list(raw: str) -> list[str]:
     """容忍 LLM 输出里多余的 ```json 围栏或前后文字，取出第一个 JSON 数组。"""
@@ -94,7 +112,7 @@ def generate_queries(question: str) -> list[str]:
     print(repr(raw))  # repr 会显式打印所有换行符 \n、空格和 ``` 标记
     print("=" * 56 + "\n")
     # ----------------------------------------------
-    return _parse_json_list(raw)
+    return _parse_json_list(raw)      #  json.loads(raw) 查看LLM原始输出   _parse_json_list(raw) 承接结果
 
 
 def answer_question(question: str, results: list[dict]) -> str:
@@ -105,10 +123,12 @@ def answer_question(question: str, results: list[dict]) -> str:
         url = r.get("url", "")
         content = (r.get("content") or "").strip()
         # ---------------- 打印检索结果 ----------------
+        print("\n" + "=" * 20 + f" 搜索结果{i} " + "=" * 20)
         print(f"\n结果: {i}")
         print(f"标题: {title}")
         print(f"URL: {url}")
         print(f"内容: {content[:300]}")
+        print("=" * 56 + "\n")
         # ----------------------------------------------
         blocks.append(f"[{i}] {title}\n来源: {url}\n{content}")
     prompt = (
