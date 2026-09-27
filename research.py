@@ -9,8 +9,8 @@ import urllib.request
 AI_BASE_URL = ""   # 在 load_dotenv() 后按顺序赋值
 AI_API_KEY = ""
 AI_MODEL = ""
-TAVILY_BASE_URL = ""
-TAVILY_API_KEY = ""
+RESEARCH_BASE_URL = ""
+RESEARCH_API_KEY = ""
 
 MAX_RESULTS = 5          # 单次搜索返回条数上限
 
@@ -30,12 +30,13 @@ def load_dotenv(path: str = ".env") -> None:
 
 def init_config() -> None:
     global AI_BASE_URL, AI_API_KEY, AI_MODEL
-    global TAVILY_BASE_URL, TAVILY_API_KEY
+    global RESEARCH_BASE_URL, RESEARCH_API_KEY
     AI_BASE_URL = os.environ.get("AI_BASE_URL", "").rstrip("/")
     AI_API_KEY = os.environ.get("AI_API_KEY", "")
     AI_MODEL = os.environ.get("AI_MODEL", "")
-    TAVILY_BASE_URL = os.environ.get("TAVILY_BASE_URL", "https://api.tavily.com").rstrip("/")
-    TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "")
+    RESEARCH_API_KEY = os.environ.get("RESEARCH_API_KEY", "")
+    RESEARCH_BASE_URL = os.environ.get("RESEARCH_BASE_URL", "").rstrip("/")
+    RESEARCH_API_KEY = os.environ.get("RESEARCH_API_KEY", "")
 
 
 # ------------------------- LLM-------------------------
@@ -108,7 +109,7 @@ def generate_queries(question: str) -> list[str]:
     )
     raw = _chat([{"role": "user", "content": prompt}], temperature=0.5)
     # ---------------- 核心测试代码 ----------------
-    print("\n" + "=" * 20 + " LLM 原始输出实况 " + "=" * 20)
+    print("\n" + "=" * 20 + "generate_queries LLM 原始输出实况 " + "=" * 20)
     print(repr(raw))  # repr 会显式打印所有换行符 \n、空格和 ``` 标记
     print("=" * 56 + "\n")
     # ----------------------------------------------
@@ -145,18 +146,18 @@ def answer_question(question: str, results: list[dict]) -> str:
     return _chat([{"role": "user", "content": prompt}], temperature=0.3)
 
 
-# ------------------------- 搜索 (Tavily) -------------------------
+# ------------------------- 搜索 (search) -------------------------
 
-def search_tavily(query: str) -> list[dict]:
-    """Tavily Search API，返回 [{title, url, content}, ...]。"""
+def search(query: str) -> list[dict]:
+    """ Search API，返回 [{title, url, content}, ...]。"""
     body = json.dumps({
-        "api_key": TAVILY_API_KEY,
+        "api_key": RESEARCH_API_KEY,
         "query": query,
         "search_depth": "basic",
         "max_results": MAX_RESULTS,
     }).encode("utf-8")
     req = urllib.request.Request(
-        f"{TAVILY_BASE_URL}/search",
+        f"{RESEARCH_BASE_URL}/search",
         data=body,
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -166,7 +167,7 @@ def search_tavily(query: str) -> list[dict]:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Tavily API 报错 {e.code}: {detail[:500]}") from e
+        raise RuntimeError(f"Search API 报错 {e.code}: {detail[:500]}") from e
     return data.get("results", [])
 
 
@@ -186,7 +187,7 @@ def dedup_by_url(results: list[dict]) -> list[dict]:
 def research(question: str) -> tuple[str, list[str], list[dict]]:
     """跑完整管线，返回 (答案, 搜索关键词, 搜索结果)。"""
     queries = generate_queries(question)
-    results = dedup_by_url([r for q in queries for r in search_tavily(q)])[:MAX_RESULTS]
+    results = dedup_by_url([r for q in queries for r in search(q)])[:MAX_RESULTS]
     answer = answer_question(question, results)
     return answer, queries, results
 
@@ -194,11 +195,11 @@ def research(question: str) -> tuple[str, list[str], list[dict]]:
 def main() -> int:
     load_dotenv()
     init_config()
-    if not AI_API_KEY or not TAVILY_API_KEY:
+    if not AI_API_KEY or not RESEARCH_API_KEY:
         print(
             "缺少 API key。请先创建 .env 文件，内容参照 .env.example：\n"
             "  AI_API_KEY=sk-...\n"
-            "  TAVILY_API_KEY=tvly-..."
+            "  RESEARCH_API_KEY=tvly-..."
         )
         return 1
 
@@ -219,9 +220,9 @@ def main() -> int:
             queries = generate_queries(question)
             print(f"      关键词: {' | '.join(queries)}")
 
-            print("[2/3] Tavily 搜索...")
+            print("[2/3] Search 搜索...")
             results = dedup_by_url(
-                [r for q in queries for r in search_tavily(q)]
+                [r for q in queries for r in search(q)]
             )[:MAX_RESULTS]
             print(f"      搜到 {len(results)} 条结果")
 
