@@ -1,8 +1,10 @@
+import html.parser
 import json
 import os
 import sys
 import urllib.error
 import urllib.request
+from urllib.parse import quote, urlparse, urlunparse
 
 # ------------------------- 配置 -------------------------
 
@@ -34,26 +36,30 @@ def init_config() -> None:
     AI_BASE_URL = os.environ.get("AI_BASE_URL", "").rstrip("/")
     AI_API_KEY = os.environ.get("AI_API_KEY", "")
     AI_MODEL = os.environ.get("AI_MODEL", "")
-    RESEARCH_API_KEY = os.environ.get("RESEARCH_API_KEY", "")
     RESEARCH_BASE_URL = os.environ.get("RESEARCH_BASE_URL", "").rstrip("/")
     RESEARCH_API_KEY = os.environ.get("RESEARCH_API_KEY", "")
+
+
+def _join_url(base: str, path: str) -> str:
+    """拼接 Base URL 与路径，避免 /research/research/search 这类重复前缀。
+
+    核心规则：先去掉 base 末尾的斜杠和多余的路径段，再补一个 /path。
+    无论 base 填的是 https://xxx.com 还是 https://xxx.com/research，结果都正确。
+    """
+    base = base.rstrip("/")                       # 去末尾斜杠
+    path = path.lstrip("/")                       # 去前导斜杠
+    # 若 base 末尾已经是 /path，直接作为完整 URL，不再追加
+    if base.endswith("/" + path):
+        return base
+    return f"{base}/{path}"
 
 
 # ------------------------- LLM-------------------------
 
 def _chat(messages: list[dict], temperature: float) -> str:
     """调用 AI API，返回回复文本。"""
-    # 1. 规范化 Base URL，去除末尾斜杠
-    base_url = AI_BASE_URL.rstrip("/")
-    # 如果已填 /v1 则直接拼接，避免重复
-    if not base_url.endswith("/v1") and not base_url.endswith("/chat/completions"):
-        # 大多数兼容 OpenAI 规范的端点需要 /v1
-        # 若是 DeepSeek 官方直接用 https://api.deepseek.com/chat/completions，保留兼容性
-        target_url = f"{base_url}/chat/completions"
-    elif base_url.endswith("/chat/completions"):
-        target_url = base_url
-    else:
-        target_url = f"{base_url}/chat/completions"
+    # 1. 规范化 Base URL，去除末尾斜杠，避免 /v1/v1 等重复前缀
+    target_url = _join_url(AI_BASE_URL, "chat/completions")
 
     body = json.dumps({
         "model": AI_MODEL,
@@ -117,25 +123,26 @@ def generate_queries(question: str) -> list[str]:
 
 
 def answer_question(question: str, results: list[dict]) -> str:
-    """LLM 第 2 步: 只依据搜索结果回答用户问题。"""
+    """LLM 第 2 步: 只依据搜索结果回答用户问题。优先使用 Extract 的网页正文。"""
     blocks = []
     for i, r in enumerate(results, 1):
         title = r.get("title", "（无标题）")
         url = r.get("url", "")
-        content = (r.get("content") or "").strip()
+        # 优先用 Extract 抓到的网页正文，没有则退回搜索摘要
+        content = (r.get("extracted") or r.get("content") or "").strip()
         # ---------------- 打印检索结果 ----------------
         print("\n" + "=" * 20 + f" 搜索结果{i} " + "=" * 20)
         print(f"\n结果: {i}")
         print(f"标题: {title}")
         print(f"URL: {url}")
-        print(f"内容: {content[:300]}")
+        print(f"内容({len(content)}字符): {content[:300]}")
         print("=" * 56 + "\n")
         # ----------------------------------------------
         blocks.append(f"[{i}] {title}\n来源: {url}\n{content}")
     prompt = (
         "你是一个研究助手。基于下面的搜索结果回答用户提出的问题。\n"
         "要求:\n"
-        "1. 只依据搜索结果，不要凭空编造。\n"
+        "1. 只依据搜索结果（含网页正文），不要凭空编造。\n"
         "2. 用与用户问题相同的语言回答。\n"
         "3. 用要点列出关键信息，并在每条后面标注来源编号，如 (来源: 1)。\n"
         "4. 若搜索结果不足以回答，如实说明还缺什么信息。\n\n"
@@ -157,7 +164,7 @@ def search(query: str) -> list[dict]:
         "max_results": MAX_RESULTS,
     }).encode("utf-8")
     req = urllib.request.Request(
-        f"{RESEARCH_BASE_URL}/search",
+        _join_url(RESEARCH_BASE_URL, "/search"),
         data=body,
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -182,12 +189,121 @@ def dedup_by_url(results: list[dict]) -> list[dict]:
     return unique
 
 
+# ------------------------- Extract (网页正文抽取) -------------------------
+
+EXTRACT_MAX_CHARS = 6000     # 单页正文最多保留的字符数（避免 prompt 过长）
+
+
+class _TextExtractor(html.parser.HTMLParser):
+    """用标准库 html.parser 把 HTML 剥成纯文本。"""
+
+    _BLOCK_TAGS = {"p", "div", "br", "li", "tr", "h1", "h2", "h3",
+                   "h4", "h5", "h6", "blockquote", "section", "article"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+        self._skip_depth = 0            # 进入 <script>/<style> 时深度，正文不计
+
+    def handle_starttag(self, tag: str, attrs: list) -> None:  # noqa: ARG002
+        if tag in ("script", "style", "noscript"):
+            self._skip_depth += 1
+        if self._skip_depth == 0 and tag in self._BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in ("script", "style", "noscript") and self._skip_depth > 0:
+            self._skip_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._skip_depth == 0:
+            self.parts.append(data)
+
+    def extract(self) -> str:
+        """拼接文本、折叠空白、去掉多余空行。"""
+        text = " ".join("".join(self.parts).split())
+        lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
+        return "\n".join(lines)
+
+
+def fetch_page(url: str) -> str:
+    """GET 抓取网页，返回响应的文本内容（自动解码字符集）。"""
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 "
+                 "Safari/537.36"},
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        raw = resp.read()
+    # 优先用响应头里的 charset 解码，否则按 utf-8 并容错
+    charset = (resp.headers.get_content_charset() or "utf-8")
+    return raw.decode(charset, errors="replace")
+
+
+def extract_webpage(url: str) -> str:
+    """Extract 步骤：抓取单个 URL 的网页正文，截断到 EXTRACT_MAX_CHARS。"""
+    html_text = fetch_page(url)
+    body = _TextExtractor()
+    body.feed(html_text)
+    return body.extract()[:EXTRACT_MAX_CHARS]
+
+
+def normalize_ascii_url(url: str) -> str:
+    """把 URL 路径和查询参数里的中文、空格、特殊字符转为百分号编码，重新拼成完整 URL。
+
+    已编码的 %XX 保留不二次编码；路径分隔符 / 与查询分隔符 =& + 也保留，
+    只编码真正非法的字符（中文、空格等）。
+    """
+    parts = urlparse(url)
+    path = quote(parts.path, safe="/%@")
+    query = quote(parts.query, safe="=&+%/?")
+    fragment = quote(parts.fragment, safe="/%")
+    return urlunparse(
+        (parts.scheme, parts.netloc, path, parts.params, query, fragment)
+    )
+
+
+def extract_results(results: list[dict]) -> list[dict]:
+    """对每个结果抓取网页正文，写入 result['extracted']。
+
+    Fallback 流程:
+    Tavily Extract → 失败 → 判断原因 →
+        URL 编码问题 (UnicodeEncodeError) → 百分号编码后重试
+        其他错误                           → 跳过（extracted 留空，LLM 用搜索摘要兜底）
+    """
+    for r in results:
+        url = r.get("url", "")
+        text, retried = "", False
+        try:
+            text = extract_webpage(url)
+        except UnicodeEncodeError:
+            retried = True
+            print(f"      [extract] URL 含中文/特殊字符，百分号编码后重试: {url}")
+            try:
+                text = extract_webpage(normalize_ascii_url(url))
+            except Exception as e:
+                print(f"      [extract] 编码重试仍失败: {url} → {e}")
+        except Exception as e:
+            print(f"      [extract] 其他错误，跳过: {url} → {e}")
+        r["extracted"] = text
+        if text:
+            suffix = " (编码后重试)" if retried else ""
+            print(f"      [extract] {url}  → {len(text)} 字符{suffix}")
+    return results
+
+
 # ------------------------- 主流程 -------------------------
 
 def research(question: str) -> tuple[str, list[str], list[dict]]:
-    """跑完整管线，返回 (答案, 搜索关键词, 搜索结果)。"""
+    """跑完整管线，返回 (答案, 搜索关键词, 搜索结果)。
+
+    管线: 问题 → LLM生成关键词 → Search API 搜 5 个 URL
+          → Extract 逐个抓网页正文 → LLM 生成答案
+    """
     queries = generate_queries(question)
     results = dedup_by_url([r for q in queries for r in search(q)])[:MAX_RESULTS]
+    extract_results(results)
     answer = answer_question(question, results)
     return answer, queries, results
 
@@ -220,13 +336,16 @@ def main() -> int:
             queries = generate_queries(question)
             print(f"      关键词: {' | '.join(queries)}")
 
-            print("[2/3] Search 搜索...")
+            print("[2/4] Search 搜索...")
             results = dedup_by_url(
                 [r for q in queries for r in search(q)]
             )[:MAX_RESULTS]
             print(f"      搜到 {len(results)} 条结果")
 
-            print("[3/3] 生成答案...\n")
+            print("[3/4] Extract 网页正文...")
+            extract_results(results)
+
+            print("[4/4] 生成答案...\n")
             answer = answer_question(question, results)
             print(answer)
         except (RuntimeError, ValueError) as e:

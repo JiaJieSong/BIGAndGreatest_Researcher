@@ -1,18 +1,9 @@
 # Researcher
 
-简单的 Research Agent
-
-## 使用
-
-```bash
-# 1. 填 key
-cp .env.example .env   # 填入 AI_KEY 和  RESEARCH_API_KEY
-
-# 2. 运行
-python research.py
-```
-
-交互式输入问题，输入 `exit` 退出。
+Research Agent
+版本：
+research_v1 : 用户问题 → LLM → Search API → 得到 5 个 URL → Extract → 得到网页正文 → LLM → 答案
+research_v2：（现在在做）
 
 ## 配置
 
