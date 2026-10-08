@@ -2,3 +2,10 @@
 __pycache__/
 *.pyc
 .env
+
+# 测试生成的图表
+_test_*.png
+
+# 真实运行日志
+_v3_realrun*.log
+
