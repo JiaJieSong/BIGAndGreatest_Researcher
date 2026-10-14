@@ -82,6 +82,16 @@ def _join_url(base: str, path: str) -> str:
 
 # ------------------------- LLM -------------------------
 
+def _urlopen(req: urllib.request.Request, timeout: float):
+    """打开请求；目标为本机地址时绕过系统代理（Hiddify 等会把 127.0.0.1
+    的请求也转发到代理端口，导致 new-api 返回 502/连接重置）。"""
+    host = urlparse(req.full_url).hostname or ""
+    if host in ("localhost", "127.0.0.1", "::1") or host.startswith("127."):
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        return opener.open(req, timeout=timeout)
+    return urllib.request.urlopen(req, timeout=timeout)
+
+
 def _chat(messages: list[dict], temperature: float) -> str:
     """调用 AI API，返回回复文本。"""
     # 1. 规范化 Base URL，避免 /v1/v1 等重复前缀
@@ -104,7 +114,7 @@ def _chat(messages: list[dict], temperature: float) -> str:
 
     # 3. 扩大捕获范围，捕获断连和网络错误
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with _urlopen(req, timeout=120) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
@@ -254,7 +264,7 @@ def plan_research(question: str) -> ResearchPlan:
 
     数据流:
     User Question → Planner (LLM) → ResearchPlan(original_question, sub_questions)
-
+ 
     错误处理:
     - LLM 调用失败 (RuntimeError) / 非法 JSON / 缺字段 → 重试一次，仍失败则抛 ValueError
     - 输出不足 SUB_QUESTION_MIN 个 → 用原问题补位兜底，计划大小始终 >= SUB_QUESTION_MIN
@@ -308,7 +318,7 @@ def search(query: str) -> list[dict]:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
+        with _urlopen(req, timeout=60) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
@@ -423,7 +433,7 @@ def fetch_page(url: str) -> str:
                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 "
                  "Safari/537.36"},
     )
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with _urlopen(req, timeout=30) as resp:
         raw = resp.read()
     # 优先用响应头里的 charset 解码，否则按 utf-8 并容错
     charset = (resp.headers.get_content_charset() or "utf-8")
