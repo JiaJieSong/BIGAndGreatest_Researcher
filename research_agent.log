@@ -641,3 +641,544 @@ URL: https://juejin.cn/post/7472928800431538202
 URL: https://github.com/microwind/algorithms/blob/main/start-here/AI-Era-Programmers-as-Agent-Engineers.md
 [17] AI编程时代，什么样的程序员不容易被淘汰？ - 刀法如飞 - 博客园
 URL: https://www.cnblogs.com/jarryli/p/19752782
+======================================================================
+2026-10-19 10:18:27 [DEBUG  ] research.main     已加载 .env 配置 (AI_MODEL=free-model, RESEARCH_BASE_URL=https://api.tavily.com)
+2026-10-19 10:18:27 [DEBUG  ] research.main     配置就绪: AI_BASE_URL=http://127.0.0.1:3000/v1, AI_MODEL=free-model, RESEARCH_BASE_URL=https://api.tavily.com
+2026-10-19 10:18:27 [INFO   ] research.main     Research Agent V3 就绪（输入 exit 退出，日志文件: research_agent.log）
+2026-10-19 10:19:54 [INFO   ] research.main     ==================================================
+2026-10-19 10:19:54 [INFO   ] research.main     Research Agent V3
+2026-10-19 10:19:54 [INFO   ] research.main     ==================================================
+2026-10-19 10:19:54 [INFO   ] research.main     [1/4] Understanding Question
+2026-10-19 10:19:54 [INFO   ] research.main     User: e:\github_project\BIGAndGreatest_Researcher\.venv\Scripts\python.exe e:/github_project/BIGAndGreatest_Researcher/research_v3_logging.py
+2026-10-19 10:19:54 [INFO   ] research.main     [2/4] Planning Research
+2026-10-19 10:19:54 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究规划器 (Planner)。你的任务只有一个：把用户的原始问题拆解成一组可独立检索、可合并回答的子问题。你不负责回答问题本身。
+
+拆解原则:
+1. 理解用户真正想研究的问题，先判断它需要哪...
+2026-10-19 10:19:56 [DEBUG  ] research.llm      响应: 219 字符 | {   "sub_questions": [     {"id": "q1", "question": "Python脚本运行报错或提示找不到文件的原因有哪些"},     {"id": "q2", "question": "如何正确在Windows环境下通过命令行运行带虚拟环境的Python脚本"
+2026-10-19 10:19:56 [DEBUG  ] research.planner    q1: Python脚本运行报错或提示找不到文件的原因有哪些
+2026-10-19 10:19:56 [DEBUG  ] research.planner    q2: 如何正确在Windows环境下通过命令行运行带虚拟环境的Python脚本
+2026-10-19 10:19:56 [DEBUG  ] research.planner    q3: Python项目中绝对路径和相对路径的正确配置方法是什么
+2026-10-19 10:19:56 [INFO   ] research.main     Generated 3 sub-questions
+2026-10-19 10:19:56 [INFO   ] research.main       Q1: Python脚本运行报错或提示找不到文件的原因有哪些
+2026-10-19 10:19:56 [INFO   ] research.main       Q2: 如何正确在Windows环境下通过命令行运行带虚拟环境的Python脚本
+2026-10-19 10:19:56 [INFO   ] research.main       Q3: Python项目中绝对路径和相对路径的正确配置方法是什么
+2026-10-19 10:19:56 [INFO   ] research.main     [3/4] Researching
+2026-10-19 10:19:56 [INFO   ] research.main     [Q1] Search → Fetch → Extract → Summary ...
+2026-10-19 10:19:56 [DEBUG  ] research.llm      请求: model=free-model temp=0.50 messages=1 条 | 最后一条: 你是一个网络搜索助手。根据下面这个问题，生成 3 个最可能搜到答案的搜索关键词。
+关键词的语言与问题保持一致。
+直接输出 JSON 字符串数组，例如 ["关键词1", "关键词2", "关键词3"]，...
+2026-10-19 10:19:57 [DEBUG  ] research.llm      响应: 89 字符 | ["Python 找不到文件 报错 原因", "Python script file not found causes", "Python 相对路径 绝对路径 报错 解决方法"]
+2026-10-19 10:19:57 [DEBUG  ] research.search   关键词生成: 3 个 → ['Python 找不到文件 报错 原因', 'Python script file not found causes', 'Python 相对路径 绝对路径 报错 解决方法']
+2026-10-19 10:19:57 [DEBUG  ] research.search   Search API: query='Python 找不到文件 报错 原因' (depth=advanced, max=5)
+======================================================================
+2026-10-19 10:20:13 [DEBUG  ] research.main     已加载 .env 配置 (AI_MODEL=free-model, RESEARCH_BASE_URL=https://api.tavily.com)
+2026-10-19 10:20:13 [DEBUG  ] research.main     配置就绪: AI_BASE_URL=http://127.0.0.1:3000/v1, AI_MODEL=free-model, RESEARCH_BASE_URL=https://api.tavily.com
+2026-10-19 10:20:13 [INFO   ] research.main     Research Agent V3 就绪（输入 exit 退出，日志文件: research_agent.log）
+2026-10-19 10:22:58 [INFO   ] research.main     ==================================================
+2026-10-19 10:22:58 [INFO   ] research.main     Research Agent V3
+2026-10-19 10:22:58 [INFO   ] research.main     ==================================================
+2026-10-19 10:22:58 [INFO   ] research.main     [1/4] Understanding Question
+2026-10-19 10:22:58 [INFO   ] research.main     User: 健身期的蛋白质推荐排行
+2026-10-19 10:22:58 [INFO   ] research.main     [2/4] Planning Research
+2026-10-19 10:22:58 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究规划器 (Planner)。你的任务只有一个：把用户的原始问题拆解成一组可独立检索、可合并回答的子问题。你不负责回答问题本身。
+
+拆解原则:
+1. 理解用户真正想研究的问题，先判断它需要哪...
+2026-10-19 10:23:00 [DEBUG  ] research.llm      响应: 250 字符 | {   "sub_questions": [     {"id": "q1", "question": "健身期间每天每公斤体重需要摄入多少蛋白质"},     {"id": "q2", "question": "常见健身蛋白质来源有哪些及其生物利用率排行"},     {"id": "q3", "
+2026-10-19 10:23:00 [DEBUG  ] research.planner    q1: 健身期间每天每公斤体重需要摄入多少蛋白质
+2026-10-19 10:23:00 [DEBUG  ] research.planner    q2: 常见健身蛋白质来源有哪些及其生物利用率排行
+2026-10-19 10:23:00 [DEBUG  ] research.planner    q3: 不同健身阶段（增肌与减脂）如何选择蛋白质补剂
+2026-10-19 10:23:00 [DEBUG  ] research.planner    q4: 乳清蛋白、酪蛋白和植物蛋白的优缺点及适用场景对比
+2026-10-19 10:23:00 [INFO   ] research.main     Generated 4 sub-questions
+2026-10-19 10:23:00 [INFO   ] research.main       Q1: 健身期间每天每公斤体重需要摄入多少蛋白质
+2026-10-19 10:23:00 [INFO   ] research.main       Q2: 常见健身蛋白质来源有哪些及其生物利用率排行
+2026-10-19 10:23:00 [INFO   ] research.main       Q3: 不同健身阶段（增肌与减脂）如何选择蛋白质补剂
+2026-10-19 10:23:00 [INFO   ] research.main       Q4: 乳清蛋白、酪蛋白和植物蛋白的优缺点及适用场景对比
+2026-10-19 10:23:00 [INFO   ] research.main     [3/4] Researching
+2026-10-19 10:23:00 [INFO   ] research.main     [Q1] Search → Fetch → Extract → Summary ...
+2026-10-19 10:23:00 [DEBUG  ] research.llm      请求: model=free-model temp=0.50 messages=1 条 | 最后一条: 你是一个网络搜索助手。根据下面这个问题，生成 3 个最可能搜到答案的搜索关键词。
+关键词的语言与问题保持一致。
+直接输出 JSON 字符串数组，例如 ["关键词1", "关键词2", "关键词3"]，...
+2026-10-19 10:23:01 [DEBUG  ] research.llm      响应: 62 字符 | [   "健身 每天每公斤体重 蛋白质",   "健身期间 蛋白质摄入量 计算",   "增肌 蛋白质 每天每公斤体重" ]
+2026-10-19 10:23:01 [DEBUG  ] research.search   关键词生成: 3 个 → ['健身 每天每公斤体重 蛋白质', '健身期间 蛋白质摄入量 计算', '增肌 蛋白质 每天每公斤体重']
+2026-10-19 10:23:01 [DEBUG  ] research.search   Search API: query='健身 每天每公斤体重 蛋白质' (depth=advanced, max=5)
+2026-10-19 10:23:06 [DEBUG  ] research.search     结果: 健身人群蛋白质摄入量计算全攻略 | https://m.baidu.com/bh/m/detail/ar_4608866978712017708?frsrcid=rec | 摘要 766 字符
+2026-10-19 10:23:06 [DEBUG  ] research.search     结果: 健身每公斤体重摄入多少蛋白质 | 百度健康·医学科普 | https://health.baidu.com/m/detail/ar_5773011186759053291 | 摘要 617 字符
+2026-10-19 10:23:06 [DEBUG  ] research.search     结果: 健身人群每日蛋白质摄入推荐 | https://m.baidu.com/bh/m/detail/ar_3324965317993309190?frsrcid=rec | 摘要 838 字符
+2026-10-19 10:23:06 [DEBUG  ] research.search     结果: 运动健身每天需要多少蛋白质 | 百度健康·医学科普 | https://health.baidu.com/m/detail/ar_6520221632364343164 | 摘要 595 字符
+2026-10-19 10:23:06 [DEBUG  ] research.search     结果: 70公斤健身者每日蛋白质摄入量建议 | https://m.baidu.com/bh/m/detail/ar_6847716543204940057?frsrcid=rec | 摘要 413 字符
+2026-10-19 10:23:06 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:06 [DEBUG  ] research.search   Search API: query='健身期间 蛋白质摄入量 计算' (depth=advanced, max=5)
+2026-10-19 10:23:10 [DEBUG  ] research.search     结果: 健身人群蛋白质摄入量计算全攻略 | https://m.baidu.com/bh/m/detail/ar_4608866978712017708?frsrcid=rec | 摘要 766 字符
+2026-10-19 10:23:10 [DEBUG  ] research.search     结果: 蛋白质、碳水、脂肪的摄入量计算方法- 日记 | https://m.douban.com/note/740576856 | 摘要 63 字符
+2026-10-19 10:23:10 [DEBUG  ] research.search     结果: 健身工廠 | Blog | https://www.fitnessfactory.com.tw/tw/blog/%E5%81%A5%E4%BA%BA%E7%9A%84%E7%87%9F%E9%A4%8A%E5%AD%B8/%E9%8D%9B%E9%8D%8A%E5%BE%8C%E7%B0%A1%E5%96%AE%E8%A3%9C%E5%85%85%E8%9B%8B%E7%99%BD%E8%B3%AA%E4%BD%A0%E8%A6%81%E7%9A%84%E8%9B%8B%E7%99%BD%E8%B3%AA%E5%BF%83%E6%B3%95%E9%83%BD%E5%9C%A8%E9%80%99 | 摘要 2238 字符
+2026-10-19 10:23:10 [DEBUG  ] research.search     结果: 蛋白质计算器 | https://getfitoapp.com/zh/tools/free-daily-protein-calculator | 摘要 85 字符
+2026-10-19 10:23:10 [DEBUG  ] research.search     结果: 营养元素计算器 | 轻松了解每日所需的营养 - Myprotein中国 | https://www.myprotein.cn/blog/nutrition/macro-calculator-how-to-calculate-macros-iifym | 摘要 2088 字符
+2026-10-19 10:23:10 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:10 [DEBUG  ] research.search   Search API: query='增肌 蛋白质 每天每公斤体重' (depth=advanced, max=5)
+2026-10-19 10:23:13 [DEBUG  ] research.search     结果: 增肌者每天需要多少蛋白质 | https://zhuanlan.zhihu.com/p/158895097 | 摘要 78 字符
+2026-10-19 10:23:13 [DEBUG  ] research.search     结果: 增肌需要多少蛋白质？每日目标 | Gainflow | https://www.gainflow.app/zh/blog/zengji-xuyao-duoshao-danbaizhi | 摘要 2334 字符
+2026-10-19 10:23:13 [DEBUG  ] research.search     结果: 增肌需要多少蛋白质：实用指南 | WorkoutGen 博客 | https://workoutgen.app/zh/articles/protein-intake-muscle-growth-guide | 摘要 2339 字符
+2026-10-19 10:23:13 [DEBUG  ] research.search     结果: 健身人群蛋白质摄入量计算全攻略 | https://m.baidu.com/bh/m/detail/ar_4608866978712017708?frsrcid=rec | 摘要 766 字符
+2026-10-19 10:23:13 [DEBUG  ] research.search     结果: 我需要多少蛋白质才能增肌？基于证据的指南 | https://nutrola.app/zh/blog/how-much-protein-do-i-need-to-build-muscle | 摘要 76 字符
+2026-10-19 10:23:13 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:13 [DEBUG  ] research.search   URL 去重: 15 → 13
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_4608866978712017708?frsrcid=rec
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://health.baidu.com/m/detail/ar_5773011186759053291
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_3324965317993309190?frsrcid=rec
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://health.baidu.com/m/detail/ar_6520221632364343164
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_6847716543204940057?frsrcid=rec
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://m.douban.com/note/740576856
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://zhuanlan.zhihu.com/p/158895097
+2026-10-19 10:23:13 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://nutrola.app/zh/blog/how-much-protein-do-i-need-to-build-muscle
+2026-10-19 10:23:13 [DEBUG  ] research.search   [q1] 关键词 3 个 → 原始 15 → 去重 13 → 过滤后保留 5
+2026-10-19 10:23:15 [DEBUG  ] research.extract  [extract] https://www.fitnessfactory.com.tw/tw/blog/%E5%81%A5%E4%BA%BA%E7%9A%84%E7%87%9F%E9%A4%8A%E5%AD%B8/%E9%8D%9B%E9%8D%8A%E5%BE%8C%E7%B0%A1%E5%96%AE%E8%A3%9C%E5%85%85%E8%9B%8B%E7%99%BD%E8%B3%AA%E4%BD%A0%E8%A6%81%E7%9A%84%E8%9B%8B%E7%99%BD%E8%B3%AA%E5%BF%83%E6%B3%95%E9%83%BD%E5%9C%A8%E9%80%99 → 4414 字符 (截断至 6000)
+2026-10-19 10:23:19 [DEBUG  ] research.extract  [extract] https://getfitoapp.com/zh/tools/free-daily-protein-calculator → 1190 字符 (截断至 6000)
+2026-10-19 10:23:24 [DEBUG  ] research.extract  [extract] https://www.myprotein.cn/blog/nutrition/macro-calculator-how-to-calculate-macros-iifym → 4890 字符 (截断至 6000)
+2026-10-19 10:23:25 [DEBUG  ] research.extract  [extract] https://www.gainflow.app/zh/blog/zengji-xuyao-duoshao-danbaizhi → 6000 字符 (截断至 6000)
+2026-10-19 10:23:27 [DEBUG  ] research.extract  [extract] https://workoutgen.app/zh/articles/protein-intake-muscle-growth-guide → 3279 字符 (截断至 6000)
+2026-10-19 10:23:27 [INFO   ] research.extract  网页抓取: 5/5 页成功获得正文
+2026-10-19 10:23:27 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:23:28 [DEBUG  ] research.llm      响应: 561 字符 | {   "evidence": [     {       "claim": "運動健身族群每日建議攝取每公斤體重1.5至1.7公克的蛋白質，亦可依運動目標提高至每天每公斤體重1.5到2.0公克不等。",       "evidence_text": "• 運動健身族＝體重（kg）×1.5~1.7（
+2026-10-19 10:23:28 [DEBUG  ] research.evidence [q1] https://www.fitnessfactory.com.tw/tw/blog/%E5%81%A5%E4%BA%BA 提取 1 条: 運動健身族群每日建議攝取每公斤體重1.5至1.7公克的蛋白質，亦可依運動目標提高
+2026-10-19 10:23:28 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:23:29 [DEBUG  ] research.llm      响应: 20 字符 | {   "evidence": [] }
+2026-10-19 10:23:29 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:23:30 [DEBUG  ] research.llm      响应: 323 字符 | {   "evidence": [     {       "claim": "在健身维持或增加肌肉质量期间，建议每公斤体重摄入1.0-1.2克蛋白质。",       "evidence_text": "维持或增加肌肉质量建议所需蛋白质：每千克体重1.0-1.2g蛋白质之间。",       "s
+2026-10-19 10:23:30 [DEBUG  ] research.evidence [q1] https://www.myprotein.cn/blog/nutrition/macro-calculator-how 提取 1 条: 在健身维持或增加肌肉质量期间，建议每公斤体重摄入1.0-1.2克蛋白质。
+2026-10-19 10:23:30 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:23:31 [DEBUG  ] research.llm      响应: 276 字符 | {   "evidence": [     {       "claim": "在增肌或维持阶段，建议每天每公斤体重摄入 1.6 至 2.2 克蛋白质。",       "evidence_text": "增肌或维持：每公斤体重 1.6–2.2 克。",       "source_title": 
+2026-10-19 10:23:31 [DEBUG  ] research.evidence [q1] https://www.gainflow.app/zh/blog/zengji-xuyao-duoshao-danbai 提取 1 条: 在增肌或维持阶段，建议每天每公斤体重摄入 1.6 至 2.2 克蛋白质。
+2026-10-19 10:23:31 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:23:32 [DEBUG  ] research.llm      响应: 299 字符 | {   "evidence": [     {       "claim": "为了增肌，健身期间每天每公斤体重需要摄入 1.6 到 2.2 克蛋白质。",       "evidence_text": "为了增肌，每日实用的目标是每公斤体重 1.6 到 2.2 克蛋白质。",       "sou
+2026-10-19 10:23:32 [DEBUG  ] research.evidence [q1] https://workoutgen.app/zh/articles/protein-intake-muscle-gro 提取 1 条: 为了增肌，健身期间每天每公斤体重需要摄入 1.6 到 2.2 克蛋白质。
+2026-10-19 10:23:32 [DEBUG  ] research.evidence 证据编号: EV-q1-001 ~ EV-q1-004（前缀 'q1-'）
+2026-10-19 10:23:32 [INFO   ] research.flow     [q1] 关键词 3 → 原始结果 15 → 去重后 13 → 过滤后 5 → 有效正文 5 页 → 证据 4 条
+2026-10-19 10:23:32 [DEBUG  ] research.writer   开始写小结: 证据 4 条, 问题: 健身期间每天每公斤体重需要摄入多少蛋白质
+2026-10-19 10:23:32 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究写作助手。根据下面的 EVIDENCE（证据）回答用户问题。
+
+要求:
+1. 只使用 EVIDENCE 中的信息，不得编造证据中没有的内容。
+2. 在支撑某一论断的句子末尾标注所用证据，格...
+2026-10-19 10:23:33 [DEBUG  ] research.llm      响应: 234 字符 | 根据您提供的证据，健身期间每天每公斤体重的蛋白质摄取量有以下不同建议：  * 运动健身族群每日建议摄取每公斤体重 1.5 至 1.7 公克的蛋白质，亦可依运动目标提高至每公斤体重 1.5 到 2.0 公克不等 [EV-q1-001]。 * 在健身维持或增加肌肉质量期间，建议每公斤体重摄入 1.0 至
+2026-10-19 10:23:33 [DEBUG  ] research.writer   小结完成: 234 字符 | 根据您提供的证据，健身期间每天每公斤体重的蛋白质摄取量有以下不同建议：  * 运动健身族群每日建议摄取每公斤体重 1.5 至 1.7 公克的蛋白质，亦可依运动目标提高至每公斤体重 1.5 到 2.0 公克不等 [EV-q1-001]。 * 在健身维持或增加肌肉质量期间，建议每公斤体重摄入 1.0 至
+2026-10-19 10:23:33 [INFO   ] research.main     [Q1] 完成 ✓（4 条证据）
+2026-10-19 10:23:33 [INFO   ] research.main     [Q2] Search → Fetch → Extract → Summary ...
+2026-10-19 10:23:33 [DEBUG  ] research.llm      请求: model=free-model temp=0.50 messages=1 条 | 最后一条: 你是一个网络搜索助手。根据下面这个问题，生成 3 个最可能搜到答案的搜索关键词。
+关键词的语言与问题保持一致。
+直接输出 JSON 字符串数组，例如 ["关键词1", "关键词2", "关键词3"]，...
+2026-10-19 10:23:34 [DEBUG  ] research.llm      响应: 52 字符 | [   "常见健身蛋白质来源",   "食物蛋白质生物利用率排行",   "蛋白质吸收率排名 健身" ]
+2026-10-19 10:23:34 [DEBUG  ] research.search   关键词生成: 3 个 → ['常见健身蛋白质来源', '食物蛋白质生物利用率排行', '蛋白质吸收率排名 健身']
+2026-10-19 10:23:34 [DEBUG  ] research.search   Search API: query='常见健身蛋白质来源' (depth=advanced, max=5)
+2026-10-19 10:23:38 [DEBUG  ] research.search     结果: 不是只有健身的人才需要！ 很多人一听到“蛋白质”， 第 ... | https://www.facebook.com/baojiandeaomi/posts/-%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E6%98%AF%E5%8F%AA%E6%9C%89%E5%81%A5%E8%BA%AB%E7%9A%84%E4%BA%BA%E6%89%8D%E9%9C%80%E8%A6%81%E5%BE%88%E5%A4%9A%E4%BA%BA%E4%B8%80%E5%90%AC%E5%88%B0%E8%9B%8B%E7%99%BD%E8%B4%A8%E7%AC%AC%E4%B8%80%E5%8F%8D%E5%BA%94%E5%B0%B1%E6%98%AF-%E5%81%A5%E8%BA%AB-%E5%A2%9E%E8%82%8C%E4%BD%86%E5%85%B6%E5%AE%9E%E5%B0%B1%E7%AE%97%E4%BD%A0%E5%AE%8C%E5%85%A8%E6%B2%A1%E6%9C%89%E5%81%A5%E8%BA%AB%E6%AF%8F%E5%A4%A9%E4%B9%9F%E9%9C%80%E8%A6%81%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%9B%A0%E4%B8%BA%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%8B%BF%E6%9D%A5%E9%95%BF%E8%82%8C%E8%82%89%E6%88%91%E4%BB%AC%E7%9A%84%E8%82%8C%E8%82%89%E7%9A%AE%E8%82%A4%E5%A4%B4%E5%8F%91%E5%92%8C%E8%BA%AB/1543142721188093 | 摘要 71 字符
+2026-10-19 10:23:38 [DEBUG  ] research.search     结果: 蛋白质，＃不只是健身人士需要。 | https://www.threads.com/@em.my597/post/DZ9BsIOGL81/%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%81%A5%E8%BA%AB%E4%BA%BA%E5%A3%AB%E9%9C%80%E8%A6%81%E5%BE%88%E5%A4%9A%E4%BA%BA%E4%BB%A5%E4%B8%BA%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%8F%AA%E6%98%AF%E4%B8%BA%E4%BA%86%E5%A2%9E%E8%82%8C%E5%85%B6%E5%AE%9E%E5%AE%83%E6%98%AF%E8%BA%AB%E4%BD%93%E6%AF%8F%E5%A4%A9%E9%83%BD%E9%9C%80%E8%A6%81%E7%9A%84%E9%87%8D%E8%A6%81%E8%90%A5%E5%85%BB%E5%AE%83%E8%83%BD%E5%B8%AE%E5%8A%A9%E8%BA%AB%E4%BD%93%E4%BF%AE%E5%A4%8D%E7%BB%84%E7%BB%87%E7%BB%B4%E6%8C%81%E8%82%8C%E8%82%89%E4%B8%8E%E4%BD%93%E5%8A%9B%E6%94%AF%E6%8C%81%E5%85%8D%E7%96%AB%E7%B3%BB%E7%BB%9F%E4%B9%9F%E6%9C%89%E5%8A%A9%E4%BA%8E%E5%A4%B4%E5%8F%91%E7%9A%AE%E8%82%A4%E6%8C%87%E7%94%B2%E7%9A%84%E5%81%A5%E5%BA%B7%E5%90%8C%E6%97%B6 | 摘要 43 字符
+2026-10-19 10:23:38 [DEBUG  ] research.search     结果: 健身後吃什麼有效補充蛋白質的5個秘密，讓你輕鬆達到完美 ... | https://www.daintiest.net/blog/posts/what-to-eat-after-a-workout-to-effectively-replenish-protein | 摘要 72 字符
+2026-10-19 10:23:38 [DEBUG  ] research.search     结果: 想增肌減脂【蛋白質食物】建議這樣吃！常見的蛋白質疑問一次解答。 | Vogue Taiwan | https://www.vogue.com.tw/beauty/article/%E8%9B%8B%E7%99%BD%E8%B3%AA%E9%A3%9F%E7%89%A9 | 摘要 2311 字符
+2026-10-19 10:23:38 [DEBUG  ] research.search     结果: 蛋白粉和食物蛋白有什么不同，到底健身需不需要吃蛋白粉 | https://m.thepaper.cn/baijiahao_11405597 | 摘要 2212 字符
+2026-10-19 10:23:38 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:38 [DEBUG  ] research.search   Search API: query='食物蛋白质生物利用率排行' (depth=advanced, max=5)
+2026-10-19 10:23:46 [DEBUG  ] research.search     结果: 联合国粮农组织和世界卫生组织最新发布的蛋白质食物排行 ... | https://www.sina.cn/news/detail/5281232193853120.html | 摘要 76 字符
+2026-10-19 10:23:46 [DEBUG  ] research.search     结果: 生物利用率 101：為何動物性蛋白質勝過植物性蛋白質 | 文章和電子書｜澳洲肉 | https://www.aussiemeat.hk/zh/blogs/articles-and-ebooks/protein-bioavailability-animal-vs-plant-based | 摘要 1991 字符
+2026-10-19 10:23:46 [DEBUG  ] research.search     结果: “高蛋白食物”排行榜，鸡蛋牛奶靠边站，鱼肉排第四 - QQ News | https://news.qq.com/rain/a/20251028A01EA300 | 摘要 83 字符
+2026-10-19 10:23:46 [DEBUG  ] research.search     结果: 蛋白质及营养价值 - 自然科学网 | http://www.zrkxw.com/ReadContent.php?id=80 | 摘要 84 字符
+2026-10-19 10:23:46 [DEBUG  ] research.search     结果: 完全蛋白质来源排名：生物利用率、成本与宏量营养素密度 | https://nutrola.app/zh/blog/complete-protein-sources-ranked-bioavailability-cost-macro-density | 摘要 83 字符
+2026-10-19 10:23:46 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:46 [DEBUG  ] research.search   Search API: query='蛋白质吸收率排名 健身' (depth=advanced, max=5)
+2026-10-19 10:23:49 [DEBUG  ] research.search     结果: 提升蛋白質吸收率的 7 個秘訣，選對時間與食物組合很重要 - 健康 Level UP | https://www.healevelup.com/679 | 摘要 2139 字符
+2026-10-19 10:23:49 [DEBUG  ] research.search     结果: #蛋白质的排名大更新，第一名万万没有想到#尚致胜#幸福智慧物语 | https://www.facebook.com/TalesofHappyWisdom/posts/%E8%9B%8B%E7%99%BD%E8%B4%A8-%E7%9A%84%E6%8E%92%E5%90%8D%E5%A4%A7%E6%9B%B4%E6%96%B0%E7%AC%AC%E4%B8%80%E5%90%8D%E4%B8%87%E4%B8%87%E6%B2%A1%E6%9C%89%E6%83%B3%E5%88%B0-%E5%B0%9A%E8%87%B4%E8%83%9C-%E5%B9%B8%E7%A6%8F%E6%99%BA%E6%85%A7%E7%89%A9%E8%AF%AD/122219510426430270 | 摘要 77 字符
+2026-10-19 10:23:49 [DEBUG  ] research.search     结果: 如何有效吸收蛋白質的6大關鍵：解鎖健康活力的必看指南 | https://www.daintiest.net/blog/posts/how-to-absorb-protein-effectively | 摘要 2033 字符
+2026-10-19 10:23:49 [DEBUG  ] research.search     结果: 高蛋白質食物排名！功效、攝取量及低卡/素食推薦 | https://www.bowtie.com.hk/blog/zh/%E7%87%9F%E9%A4%8A%E8%B2%BC%E5%A3%AB/%E9%AB%98%E8%9B%8B%E7%99%BD%E8%B3%AA-%E9%A3%9F%E7%89%A9 | 摘要 2355 字符
+2026-10-19 10:23:49 [DEBUG  ] research.search     结果: 10大高蛋白質食物排名！蛋白質食物推薦與挑選原則一次看 - 康健雜誌 | https://www.commonhealth.com.tw/article/86924 | 摘要 2303 字符
+2026-10-19 10:23:49 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:23:49 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.facebook.com/baojiandeaomi/posts/-%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E6%98%AF%E5%8F%AA%E6%9C%89%E5%81%A5%E8%BA%AB%E7%9A%84%E4%BA%BA%E6%89%8D%E9%9C%80%E8%A6%81%E5%BE%88%E5%A4%9A%E4%BA%BA%E4%B8%80%E5%90%AC%E5%88%B0%E8%9B%8B%E7%99%BD%E8%B4%A8%E7%AC%AC%E4%B8%80%E5%8F%8D%E5%BA%94%E5%B0%B1%E6%98%AF-%E5%81%A5%E8%BA%AB-%E5%A2%9E%E8%82%8C%E4%BD%86%E5%85%B6%E5%AE%9E%E5%B0%B1%E7%AE%97%E4%BD%A0%E5%AE%8C%E5%85%A8%E6%B2%A1%E6%9C%89%E5%81%A5%E8%BA%AB%E6%AF%8F%E5%A4%A9%E4%B9%9F%E9%9C%80%E8%A6%81%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%9B%A0%E4%B8%BA%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%8B%BF%E6%9D%A5%E9%95%BF%E8%82%8C%E8%82%89%E6%88%91%E4%BB%AC%E7%9A%84%E8%82%8C%E8%82%89%E7%9A%AE%E8%82%A4%E5%A4%B4%E5%8F%91%E5%92%8C%E8%BA%AB/1543142721188093
+2026-10-19 10:23:49 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.threads.com/@em.my597/post/DZ9BsIOGL81/%E8%9B%8B%E7%99%BD%E8%B4%A8%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%81%A5%E8%BA%AB%E4%BA%BA%E5%A3%AB%E9%9C%80%E8%A6%81%E5%BE%88%E5%A4%9A%E4%BA%BA%E4%BB%A5%E4%B8%BA%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%8F%AA%E6%98%AF%E4%B8%BA%E4%BA%86%E5%A2%9E%E8%82%8C%E5%85%B6%E5%AE%9E%E5%AE%83%E6%98%AF%E8%BA%AB%E4%BD%93%E6%AF%8F%E5%A4%A9%E9%83%BD%E9%9C%80%E8%A6%81%E7%9A%84%E9%87%8D%E8%A6%81%E8%90%A5%E5%85%BB%E5%AE%83%E8%83%BD%E5%B8%AE%E5%8A%A9%E8%BA%AB%E4%BD%93%E4%BF%AE%E5%A4%8D%E7%BB%84%E7%BB%87%E7%BB%B4%E6%8C%81%E8%82%8C%E8%82%89%E4%B8%8E%E4%BD%93%E5%8A%9B%E6%94%AF%E6%8C%81%E5%85%8D%E7%96%AB%E7%B3%BB%E7%BB%9F%E4%B9%9F%E6%9C%89%E5%8A%A9%E4%BA%8E%E5%A4%B4%E5%8F%91%E7%9A%AE%E8%82%A4%E6%8C%87%E7%94%B2%E7%9A%84%E5%81%A5%E5%BA%B7%E5%90%8C%E6%97%B6
+2026-10-19 10:23:49 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.daintiest.net/blog/posts/what-to-eat-after-a-workout-to-effectively-replenish-protein
+2026-10-19 10:23:49 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.sina.cn/news/detail/5281232193853120.html
+2026-10-19 10:23:49 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.facebook.com/TalesofHappyWisdom/posts/%E8%9B%8B%E7%99%BD%E8%B4%A8-%E7%9A%84%E6%8E%92%E5%90%8D%E5%A4%A7%E6%9B%B4%E6%96%B0%E7%AC%AC%E4%B8%80%E5%90%8D%E4%B8%87%E4%B8%87%E6%B2%A1%E6%9C%89%E6%83%B3%E5%88%B0-%E5%B0%9A%E8%87%B4%E8%83%9C-%E5%B9%B8%E7%A6%8F%E6%99%BA%E6%85%A7%E7%89%A9%E8%AF%AD/122219510426430270
+2026-10-19 10:23:49 [DEBUG  ] research.search   [q2] 关键词 3 个 → 原始 15 → 去重 15 → 过滤后保留 5
+2026-10-19 10:23:51 [DEBUG  ] research.extract  [extract] https://www.vogue.com.tw/beauty/article/%E8%9B%8B%E7%99%BD%E8%B3%AA%E9%A3%9F%E7%89%A9 → 5093 字符 (截断至 6000)
+2026-10-19 10:23:51 [DEBUG  ] research.extract  [extract] https://m.thepaper.cn/baijiahao_11405597 → 2983 字符 (截断至 6000)
+2026-10-19 10:23:54 [WARNING] research.extract  [extract] 抓取失败，跳过: https://www.aussiemeat.hk/zh/blogs/articles-and-ebooks/protein-bioavailability-animal-vs-plant-based → HTTP Error 429: Too Many Requests
+2026-10-19 10:23:56 [DEBUG  ] research.extract  [extract] https://news.qq.com/rain/a/20251028A01EA300 → 1651 字符 (截断至 6000)
+2026-10-19 10:24:00 [DEBUG  ] research.extract  [extract] http://www.zrkxw.com/ReadContent.php?id=80 → 3646 字符 (截断至 6000)
+2026-10-19 10:24:00 [INFO   ] research.extract  网页抓取: 4/5 页成功获得正文
+2026-10-19 10:24:00 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:01 [DEBUG  ] research.llm      响应: 762 字符 | {   "evidence": [     {       "claim": "健身族推薦的蛋白質食物包含低糖豆漿、希臘優格、天貝、雞胸肉、豬後腿瘦肉、鮭魚與蝦等。",       "evidence_text": "給健身族的蛋白質食物推薦（約含X克蛋白質/ 100克）： 低糖豆漿（3.6克/ 1
+2026-10-19 10:24:01 [DEBUG  ] research.evidence [q2] https://www.vogue.com.tw/beauty/article/%E8%9B%8B%E7%99%BD%E 提取 2 条: 健身族推薦的蛋白質食物包含低糖豆漿、希臘優格、天貝、雞胸肉、豬後腿瘦肉、鮭魚與蝦 | 一般人推薦的蛋白質食物選擇順序為豆類大於海鮮大於蛋大於肉類。
+2026-10-19 10:24:01 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:03 [DEBUG  ] research.llm      响应: 635 字符 | {   "evidence": [     {       "claim": "生物价（BV）是反映食物蛋白质消化吸收后，被机体利用程度的指标，数值越高利用率越高，乳清蛋白的BV值常接近100，是最有效率的蛋白来源。",       "evidence_text": "生物价（Biological 
+2026-10-19 10:24:03 [DEBUG  ] research.evidence [q2] https://m.thepaper.cn/baijiahao_11405597 提取 2 条: 生物价（BV）是反映食物蛋白质消化吸收后，被机体利用程度的指标，数值越高利用率越 | 健身推崇乳清蛋白而非大豆蛋白的一个重要原因是它们的吸收率差别很大。
+2026-10-19 10:24:03 [DEBUG  ] research.evidence [evidence] 正文为空，跳过: https://www.aussiemeat.hk/zh/blogs/articles-and-ebooks/protein-bioavailability-animal-vs-plant-based
+2026-10-19 10:24:03 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:05 [DEBUG  ] research.llm      响应: 994 字符 | ```json {   "evidence": [     {       "claim": "鸡蛋的蛋白质生物价是所有食物中最高的，其蛋白质能被身体最大程度地利用。",       "evidence_text": "鸡蛋： 蛋白质含量约为 13克/100克（约每颗鸡蛋含6-7克蛋白）。它之所以被
+2026-10-19 10:24:05 [DEBUG  ] research.evidence [q2] https://news.qq.com/rain/a/20251028A01EA300 提取 3 条: 鸡蛋的蛋白质生物价是所有食物中最高的，其蛋白质能被身体最大程度地利用。 | 豆制品（如豆腐皮/腐竹）是植物蛋白之王，蛋白质含量极高。 | 瘦肉类（如猪里脊、牛里脊）蛋白质生物利用率高，氨基酸组成与人体需要非常接近。
+2026-10-19 10:24:05 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:07 [DEBUG  ] research.llm      响应: 984 字符 | {   "evidence": [     {       "claim": "常见食物的蛋白质生物价（BV，表示蛋白质被吸收后在体内的利用程度）为：鸡蛋为94%，牛奶为90%，鱼83%，牛肉76%，猪肉76%，大米77%，玉米60%，花生59%，高粱56%。",       "evidence_t
+2026-10-19 10:24:07 [DEBUG  ] research.evidence [q2] http://www.zrkxw.com/ReadContent.php?id=80 提取 3 条: 常见食物的蛋白质生物价（BV，表示蛋白质被吸收后在体内的利用程度）为：鸡蛋为94 | 常见食物的蛋白质消化率分别为：奶类97%—98%，肉类为92%—94%，蛋类为9 | 常见食物的蛋白质含量为：肉类80g/500g，蛋类60g/500g，鱼类50g—
+2026-10-19 10:24:07 [DEBUG  ] research.evidence 证据编号: EV-q2-001 ~ EV-q2-010（前缀 'q2-'）
+2026-10-19 10:24:07 [INFO   ] research.flow     [q2] 关键词 3 → 原始结果 15 → 去重后 15 → 过滤后 5 → 有效正文 4 页 → 证据 10 条
+2026-10-19 10:24:07 [DEBUG  ] research.writer   开始写小结: 证据 10 条, 问题: 常见健身蛋白质来源有哪些及其生物利用率排行
+2026-10-19 10:24:07 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究写作助手。根据下面的 EVIDENCE（证据）回答用户问题。
+
+要求:
+1. 只使用 EVIDENCE 中的信息，不得编造证据中没有的内容。
+2. 在支撑某一论断的句子末尾标注所用证据，格...
+2026-10-19 10:24:08 [DEBUG  ] research.llm      响应: 459 字符 | 根据您提供的信息，常见健身蛋白质来源及相关生物利用率情况如下：  * **健身族推荐的蛋白质食物**：包含低糖豆浆、希臘優格、天貝、雞胸肉、豬後腿瘦肉、鮭魚與蝦等 [EV-q2-001]。 * **乳清蛋白**：健身推崇乳清蛋白而非大豆蛋白的一个重要原因是它们的吸收率差别很大 [EV-q2-004]
+2026-10-19 10:24:08 [DEBUG  ] research.writer   小结完成: 459 字符 | 根据您提供的信息，常见健身蛋白质来源及相关生物利用率情况如下：  * **健身族推荐的蛋白质食物**：包含低糖豆浆、希臘優格、天貝、雞胸肉、豬後腿瘦肉、鮭魚與蝦等 [EV-q2-001]。 * **乳清蛋白**：健身推崇乳清蛋白而非大豆蛋白的一个重要原因是它们的吸收率差别很大 [EV-q2-004]
+2026-10-19 10:24:08 [INFO   ] research.main     [Q2] 完成 ✓（10 条证据）
+2026-10-19 10:24:08 [INFO   ] research.main     [Q3] Search → Fetch → Extract → Summary ...
+2026-10-19 10:24:08 [DEBUG  ] research.llm      请求: model=free-model temp=0.50 messages=1 条 | 最后一条: 你是一个网络搜索助手。根据下面这个问题，生成 3 个最可能搜到答案的搜索关键词。
+关键词的语言与问题保持一致。
+直接输出 JSON 字符串数组，例如 ["关键词1", "关键词2", "关键词3"]，...
+2026-10-19 10:24:09 [DEBUG  ] research.llm      响应: 62 字符 | [   "增肌 减脂 蛋白质补剂选择",   "不同健身阶段 蛋白粉 怎么选",   "增肌期 减脂期 乳清蛋白 区别" ]
+2026-10-19 10:24:09 [DEBUG  ] research.search   关键词生成: 3 个 → ['增肌 减脂 蛋白质补剂选择', '不同健身阶段 蛋白粉 怎么选', '增肌期 减脂期 乳清蛋白 区别']
+2026-10-19 10:24:09 [DEBUG  ] research.search   Search API: query='增肌 减脂 蛋白质补剂选择' (depth=advanced, max=5)
+2026-10-19 10:24:13 [DEBUG  ] research.search     结果: 运动营养补剂指南：增肌与减脂选择及精选推荐 - Joybuy | https://m.joybuy.de/blog/sports-nutrition-supplements-guide-2026/mrzDzKuX | 摘要 77 字符
+2026-10-19 10:24:13 [DEBUG  ] research.search     结果: 减脂or 增肌，你的补剂选对了吗 | https://m.douban.com/note/602717083 | 摘要 79 字符
+2026-10-19 10:24:13 [DEBUG  ] research.search     结果: 揭秘健身补剂：蛋白粉、BCAA与肌酸的作用与选择 | https://m.baidu.com/bh/m/detail/ar_9343731511668382926?frsrcid=rec | 摘要 2068 字符
+2026-10-19 10:24:13 [DEBUG  ] research.search     结果: 增肌減脂怎麼做才正確？飲食菜單、運動安排、常見迷思與問題解答 | https://www.marstw.com/blog/posts/muscle-gain-and-fat-loss | 摘要 1581 字符
+2026-10-19 10:24:13 [DEBUG  ] research.search     结果: 增肌減脂神隊友？11種健身營養補充品介紹 - Ashlee咻咻 | https://ashleexiu.com/fitness-nutrition | 摘要 87 字符
+2026-10-19 10:24:13 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:13 [DEBUG  ] research.search   Search API: query='不同健身阶段 蛋白粉 怎么选' (depth=advanced, max=5)
+2026-10-19 10:24:18 [DEBUG  ] research.search     结果: 不同健身人群怎么选蛋白粉？FoYes类型匹配不踩坑_凤凰网 | https://baby.ifeng.com/c/8vIV9uOU9Bs | 摘要 2241 字符
+2026-10-19 10:24:18 [DEBUG  ] research.search     结果: 健身选蛋白粉，别瞎买！这4种类型，对应不同需求，不踩坑 | https://www.toutiao.com/article/7618490220131975690 | 摘要 134 字符
+2026-10-19 10:24:18 [DEBUG  ] research.search     结果: 2026不同人群蛋白粉怎么选？FoYes按训练阶段讲清 | https://www.cnblogs.com/newzq2/p/22186862 | 摘要 121 字符
+2026-10-19 10:24:18 [DEBUG  ] research.search     结果: 不同健身需求蛋白粉怎么选？2026哪些健身蛋白粉品牌好！ | https://www.toutiao.com/article/7597356898328773126 | 摘要 132 字符
+2026-10-19 10:24:18 [DEBUG  ] research.search     结果: 2026不同人群蛋白粉怎么选？FoYes按训练阶段讲清 | https://www.cet.com.cn/wzsy/kjzx/cygdzx/10482337.shtml | 摘要 111 字符
+2026-10-19 10:24:18 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:18 [DEBUG  ] research.search   Search API: query='增肌期 减脂期 乳清蛋白 区别' (depth=advanced, max=5)
+2026-10-19 10:24:21 [DEBUG  ] research.search     结果: 常見健體、健美QnA！一次釐清增肌減脂基礎觀念！ | https://medium.com/eatinnutrition/%E5%B8%B8%E8%A6%8B%E5%81%A5%E9%AB%94-%E5%81%A5%E7%BE%8E%EF%BD%91n%EF%BD%81-%E4%B8%80%E6%AC%A1%E9%87%90%E6%B8%85%E5%A2%9E%E8%82%8C%E6%B8%9B%E8%84%82%E5%9F%BA%E7%A4%8E%E8%A7%80%E5%BF%B5-c6d65ab103b2 | 摘要 57 字符
+2026-10-19 10:24:21 [DEBUG  ] research.search     结果: 乳清蛋白和增肌粉怎么选？3大区别帮你科学避坑 | https://www.familydoctor.cn/hlthsci/ruqing-danbai-zengjifen-xuan-3da-qubie-bangni-kexue-bi-keng-681542.html | 摘要 78 字符
+2026-10-19 10:24:21 [DEBUG  ] research.search     结果: Instagram | https://www.instagram.com/p/CvPDfyjvW1b | 摘要 790 字符
+2026-10-19 10:24:21 [DEBUG  ] research.search     结果: 增肌奶粉vs乳清蛋白的分別？拆解新手必犯4大防肚腩誤區 | https://newbeautygroup.hk/blog/slimming-tips/mass-gainer-ultimate-guide | 摘要 72 字符
+2026-10-19 10:24:21 [DEBUG  ] research.search     结果: 乳清蛋白功效全解析：有效增肌減脂告別肌少症 - 樂活101 | https://lohas101.org/article/whey_protein | 摘要 2287 字符
+2026-10-19 10:24:21 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_9343731511668382926?frsrcid=rec
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://m.joybuy.de/blog/sports-nutrition-supplements-guide-2026/mrzDzKuX
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://m.douban.com/note/602717083
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://medium.com/eatinnutrition/%E5%B8%B8%E8%A6%8B%E5%81%A5%E9%AB%94-%E5%81%A5%E7%BE%8E%EF%BD%91n%EF%BD%81-%E4%B8%80%E6%AC%A1%E9%87%90%E6%B8%85%E5%A2%9E%E8%82%8C%E6%B8%9B%E8%84%82%E5%9F%BA%E7%A4%8E%E8%A7%80%E5%BF%B5-c6d65ab103b2
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.familydoctor.cn/hlthsci/ruqing-danbai-zengjifen-xuan-3da-qubie-bangni-kexue-bi-keng-681542.html
+2026-10-19 10:24:21 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://newbeautygroup.hk/blog/slimming-tips/mass-gainer-ultimate-guide
+2026-10-19 10:24:21 [DEBUG  ] research.search   [q3] 关键词 3 个 → 原始 15 → 去重 15 → 过滤后保留 5
+2026-10-19 10:24:23 [DEBUG  ] research.extract  [extract] https://www.marstw.com/blog/posts/muscle-gain-and-fat-loss → 6000 字符 (截断至 6000)
+2026-10-19 10:24:25 [DEBUG  ] research.extract  [extract] https://ashleexiu.com/fitness-nutrition → 4328 字符 (截断至 6000)
+2026-10-19 10:24:26 [DEBUG  ] research.extract  [extract] https://baby.ifeng.com/c/8vIV9uOU9Bs → 4156 字符 (截断至 6000)
+2026-10-19 10:24:27 [DEBUG  ] research.extract  [extract] https://www.toutiao.com/article/7618490220131975690 → 0 字符 (截断至 6000)
+2026-10-19 10:24:27 [DEBUG  ] research.extract  [extract] https://www.cnblogs.com/newzq2/p/22186862 → 3744 字符 (截断至 6000)
+2026-10-19 10:24:27 [INFO   ] research.extract  网页抓取: 4/5 页成功获得正文
+2026-10-19 10:24:27 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:29 [DEBUG  ] research.llm      响应: 611 字符 | ```json {   "evidence": [     {       "claim": "在幫助增肌減脂的營養品中，包含了乳清蛋白或植物蛋白粉。",       "evidence_text": "四、幫助增肌減脂的營養品有哪些？4 種營養食品助力達成目標 （一）乳清蛋白／植物蛋白粉",   
+2026-10-19 10:24:29 [DEBUG  ] research.evidence [q3] https://www.marstw.com/blog/posts/muscle-gain-and-fat-loss 提取 2 条: 在幫助增肌減脂的營養品中，包含了乳清蛋白或植物蛋白粉。 | 幫助增肌減脂的營養品還包括肌酸、支鏈胺基酸（BCAA）以及 HMB。
+2026-10-19 10:24:29 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:31 [DEBUG  ] research.llm      响应: 1182 字符 | {   "evidence": [     {       "claim": "在減脂需求且不希望攝取乳清蛋白相對較高熱量，或有乳糖不耐症的情況下，EAA（必需氨基酸）是很適合的補充品。",       "evidence_text": "不過如果你有減脂需求，不想要攝取乳清蛋白相對較高的熱量，或者
+2026-10-19 10:24:31 [DEBUG  ] research.evidence [q3] https://ashleexiu.com/fitness-nutrition 提取 4 条: 在減脂需求且不希望攝取乳清蛋白相對較高熱量，或有乳糖不耐症的情況下，EAA（必需 | 葡甘聚醣可以大量吸收水分並在肚子裡產生飽腹感，進而減少熱量攝入，達到減脂效果。 | 左旋肉鹼搭配有氧運動可以降低血脂跟體脂，促使體重下降，消除低熱量飲食帶來的疲勞感 | 白腎豆萃取物能減少碳水化合物與澱粉的分解及葡萄糖吸收，很適合偏愛澱粉但同時想要減
+2026-10-19 10:24:31 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:34 [DEBUG  ] research.llm      响应: 1677 字符 | {   "evidence": [     {       "claim": "新手增肌期适合选择浓缩乳清蛋白，性价比高且蛋白含量70%-80%已够用。",       "evidence_text": "新手增肌期:浓缩乳清打基础 刚开始健身3-6个月的新手，训练强度中等，每周3-4次...这个阶
+2026-10-19 10:24:34 [DEBUG  ] research.evidence [q3] https://baby.ifeng.com/c/8vIV9uOU9Bs 提取 5 条: 新手增肌期适合选择浓缩乳清蛋白，性价比高且蛋白含量70%-80%已够用。 | 增肌突破期（训练1-2年、每周5-6次）需要选择分离乳清蛋白粉，蛋白含量85%以 | 减脂控体重期核心是低糖、低脂、高纯度，建议选择分离乳清或水解乳清，并在训练后30 | 大重量训练人群建议采用快慢蛋白组合，以兼顾训练后的快速修复和后续恢复期的持续供给 | 乳糖不耐受人群（如喝牛奶胀气者）建议选择分离乳清或水解乳清蛋白粉，以减少肠胃负担
+2026-10-19 10:24:34 [DEBUG  ] research.evidence [evidence] 正文为空，跳过: https://www.toutiao.com/article/7618490220131975690
+2026-10-19 10:24:34 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:24:38 [DEBUG  ] research.llm      响应: 1552 字符 | {   "evidence": [     {       "claim": "新手在增肌健身阶段应优先保证口味和坚持度，建议选择有口味奖项或大量用户口碑验证的产品，不需要盲目追求最高蛋白含量。",       "evidence_text": "对新手来说，一桶能坚持喝完的普通粉，比一桶喝不完的高
+2026-10-19 10:24:38 [DEBUG  ] research.evidence [q3] https://www.cnblogs.com/newzq2/p/22186862 提取 5 条: 新手在增肌健身阶段应优先保证口味和坚持度，建议选择有口味奖项或大量用户口碑验证的 | 增肌突破期（训练半年到一年半）的人群，核心问题是效果验证，除了关注蛋白含量外，更 | 健身增肌期人群每日蛋白质的总需求量建议为 1.6-2.2g/kg 体重。 | 在增肌期食用蛋白粉时，建议在训练后30分钟内补充一勺，另一勺可根据日常饮食中的蛋 | 高频训练和备赛竞技期人群对蛋白粉的要求更高，需要重点关注反兴奋剂认证等专业安全认
+2026-10-19 10:24:38 [DEBUG  ] research.evidence 证据编号: EV-q3-001 ~ EV-q3-016（前缀 'q3-'）
+2026-10-19 10:24:38 [INFO   ] research.flow     [q3] 关键词 3 → 原始结果 15 → 去重后 15 → 过滤后 5 → 有效正文 4 页 → 证据 16 条
+2026-10-19 10:24:38 [DEBUG  ] research.writer   开始写小结: 证据 16 条, 问题: 不同健身阶段（增肌与减脂）如何选择蛋白质补剂
+2026-10-19 10:24:38 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究写作助手。根据下面的 EVIDENCE（证据）回答用户问题。
+
+要求:
+1. 只使用 EVIDENCE 中的信息，不得编造证据中没有的内容。
+2. 在支撑某一论断的句子末尾标注所用证据，格...
+2026-10-19 10:24:40 [DEBUG  ] research.llm      响应: 542 字符 | 根据证据，不同健身阶段选择蛋白质补剂的建议如下：  * **新手增肌期**   * 新手健身 3-6 个月、训练强度中等时，不需要追求极致纯度，建议选择**浓缩乳清蛋白**，其性价比更高，70%-80% 的蛋白含量已足够 [EV-q3-007]。   * 对新手而言，优先保证口味和坚持度比追求最高蛋
+2026-10-19 10:24:40 [DEBUG  ] research.writer   小结完成: 542 字符 | 根据证据，不同健身阶段选择蛋白质补剂的建议如下：  * **新手增肌期**   * 新手健身 3-6 个月、训练强度中等时，不需要追求极致纯度，建议选择**浓缩乳清蛋白**，其性价比更高，70%-80% 的蛋白含量已足够 [EV-q3-007]。   * 对新手而言，优先保证口味和坚持度比追求最高蛋
+2026-10-19 10:24:40 [INFO   ] research.main     [Q3] 完成 ✓（16 条证据）
+2026-10-19 10:24:40 [INFO   ] research.main     [Q4] Search → Fetch → Extract → Summary ...
+2026-10-19 10:24:40 [DEBUG  ] research.llm      请求: model=free-model temp=0.50 messages=1 条 | 最后一条: 你是一个网络搜索助手。根据下面这个问题，生成 3 个最可能搜到答案的搜索关键词。
+关键词的语言与问题保持一致。
+直接输出 JSON 字符串数组，例如 ["关键词1", "关键词2", "关键词3"]，...
+2026-10-19 10:24:41 [DEBUG  ] research.llm      响应: 75 字符 | [   "乳清蛋白 酪蛋白 植物蛋白 区别 优缺点",   "乳清蛋白 酪蛋白 植物蛋白 适用场景",   "三种蛋白质 吸收率 健身 营养对比" ]
+2026-10-19 10:24:41 [DEBUG  ] research.search   关键词生成: 3 个 → ['乳清蛋白 酪蛋白 植物蛋白 区别 优缺点', '乳清蛋白 酪蛋白 植物蛋白 适用场景', '三种蛋白质 吸收率 健身 营养对比']
+2026-10-19 10:24:41 [DEBUG  ] research.search   Search API: query='乳清蛋白 酪蛋白 植物蛋白 区别 优缺点' (depth=advanced, max=5)
+2026-10-19 10:24:46 [DEBUG  ] research.search     结果: 乳清蛋白、植物蛋白、酪蛋白差在哪？一次選對適合你的蛋白粉 - iShare 數位內容中心 | https://www.amway.com.tw/iShare/Post/Detail/42643 | 摘要 2266 字符
+2026-10-19 10:24:46 [DEBUG  ] research.search     结果: 蛋白粉乳清蛋白粉区别 | https://m.baidu.com/bh/m/detail/ar_6893915419671729501?frsrcid=rec | 摘要 82 字符
+2026-10-19 10:24:46 [DEBUG  ] research.search     结果: 蛋白質教室：乳清蛋白vs. 酪蛋白vs. 大豆蛋白 - 快樂田生技 | https://shop.happyyard.com.tw/blog/posts/whey-protein-casein-soya-protein | 摘要 74 字符
+2026-10-19 10:24:46 [DEBUG  ] research.search     结果: Optimum Nutrition金标蛋白粉指南：乳清、酪蛋白与植物蛋白对比 | https://www.joybuy.de/blog/optimum-nutrition-gold-standard-guide/jgKprvFq | 摘要 2114 字符
+2026-10-19 10:24:46 [DEBUG  ] research.search     结果: 乳清蛋白、大豆蛋白、酪蛋白、胶原蛋白、鸡蛋蛋白...6种 ... | https://zhuanlan.zhihu.com/p/56046780 | 摘要 72 字符
+2026-10-19 10:24:46 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:46 [DEBUG  ] research.search   Search API: query='乳清蛋白 酪蛋白 植物蛋白 适用场景' (depth=advanced, max=5)
+2026-10-19 10:24:51 [DEBUG  ] research.search     结果: 植物性蛋白VS 乳清蛋白：哪一种更适合你在香港的健身生活？ | https://proteadrinks.com/zh-hans/blogs/on-protein/plant-based-vs-whey-protein-which-is-right-for-your-dietary-needs-in-hong-kong | 摘要 72 字符
+2026-10-19 10:24:51 [DEBUG  ] research.search     结果: 乳清蛋白与酪蛋白：运动增肌的双重选择解析 | https://m.baidu.com/bh/m/detail/ar_8919571124195053515?frsrcid=rec | 摘要 74 字符
+2026-10-19 10:24:51 [DEBUG  ] research.search     结果: Types of Protein Powder: Whey to Plant-Based Guide | Wellnes | https://tw.iherb.com/blog/types-of-protein-powder-from-whey-to-vegan/171 | 摘要 1817 字符
+2026-10-19 10:24:51 [DEBUG  ] research.search     结果: 补充蛋白质的正确姿势| 你真的选对蛋白粉了吗？ - MYPROTEIN™ | https://www.myprotein.cn/blog/supplements/difference-in-protein-powders | 摘要 2272 字符
+2026-10-19 10:24:51 [DEBUG  ] research.search     结果: 美国乳蛋白 | https://www.thinkusadairy.org/Documents/Microsites/Chinese/cn_2019%20US%20Dairy%20Proteins.PDF | 摘要 83 字符
+2026-10-19 10:24:51 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:51 [DEBUG  ] research.search   Search API: query='三种蛋白质 吸收率 健身 营养对比' (depth=advanced, max=5)
+2026-10-19 10:24:54 [DEBUG  ] research.search     结果: 【新知】人體可一次吸收100公克蛋白質最新研究打破 ... | https://www.facebook.com/wangsfitness/posts/%E6%96%B0%E7%9F%A5%E4%BA%BA%E9%AB%94%E5%8F%AF%E4%B8%80%E6%AC%A1%E5%90%B8%E6%94%B6100%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E6%9C%80%E6%96%B0%E7%A0%94%E7%A9%B6%E6%89%93%E7%A0%B4%E4%BA%BA%E9%AB%94%E5%96%AE%E6%AC%A1%E5%8F%AA%E8%83%BD%E5%90%B8%E6%94%B620%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E7%9A%84%E8%A7%80%E5%BF%B5%E9%81%8E%E5%8E%BB%E7%A0%94%E7%A9%B6%E7%99%BC%E7%8F%BE%E9%81%8B%E5%8B%95%E5%BE%8C%E6%94%9D%E5%8F%9620%E5%85%8B%E6%88%9640%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E6%89%80%E5%BC%95%E7%99%BC%E7%9A%84%E8%82%8C%E8%82%89%E8%9B%8B%E7%99%BD%E5%90%88%E6%88%90%E9%80%9F%E7%8E%87%E4%B8%80%E6%A8%A3%E7%A7%91%E5%AD%B8%E5%AE%B6/692811862993367 | 摘要 76 字符
+2026-10-19 10:24:54 [DEBUG  ] research.search     结果: 如何有效吸收蛋白質的6大關鍵：解鎖健康活力的必看指南 | https://www.daintiest.net/blog/posts/how-to-absorb-protein-effectively | 摘要 2028 字符
+2026-10-19 10:24:54 [DEBUG  ] research.search     结果: 哪种蛋白质消化吸收率高？你吃对了吗？ | https://zhuanlan.zhihu.com/p/498546751 | 摘要 70 字符
+2026-10-19 10:24:54 [DEBUG  ] research.search     结果: 吃对蛋白质，五个误区请避开（健身服务站） | http://paper.people.com.cn/rmrb/pc/content/202606/04/content_30161029.html | 摘要 2183 字符
+2026-10-19 10:24:54 [DEBUG  ] research.search     结果: 蛋白粉和食物蛋白有什么不同，到底健身需不需要吃蛋白粉 | https://m.thepaper.cn/baijiahao_11405597 | 摘要 2212 字符
+2026-10-19 10:24:54 [DEBUG  ] research.search   Search API 返回 5 条
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_6893915419671729501?frsrcid=rec
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(blocked): https://m.baidu.com/bh/m/detail/ar_8919571124195053515?frsrcid=rec
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://shop.happyyard.com.tw/blog/posts/whey-protein-casein-soya-protein
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://zhuanlan.zhihu.com/p/56046780
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://proteadrinks.com/zh-hans/blogs/on-protein/plant-based-vs-whey-protein-which-is-right-for-your-dietary-needs-in-hong-kong
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://www.facebook.com/wangsfitness/posts/%E6%96%B0%E7%9F%A5%E4%BA%BA%E9%AB%94%E5%8F%AF%E4%B8%80%E6%AC%A1%E5%90%B8%E6%94%B6100%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E6%9C%80%E6%96%B0%E7%A0%94%E7%A9%B6%E6%89%93%E7%A0%B4%E4%BA%BA%E9%AB%94%E5%96%AE%E6%AC%A1%E5%8F%AA%E8%83%BD%E5%90%B8%E6%94%B620%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E7%9A%84%E8%A7%80%E5%BF%B5%E9%81%8E%E5%8E%BB%E7%A0%94%E7%A9%B6%E7%99%BC%E7%8F%BE%E9%81%8B%E5%8B%95%E5%BE%8C%E6%94%9D%E5%8F%9620%E5%85%8B%E6%88%9640%E5%85%AC%E5%85%8B%E8%9B%8B%E7%99%BD%E8%B3%AA%E6%89%80%E5%BC%95%E7%99%BC%E7%9A%84%E8%82%8C%E8%82%89%E8%9B%8B%E7%99%BD%E5%90%88%E6%88%90%E9%80%9F%E7%8E%87%E4%B8%80%E6%A8%A3%E7%A7%91%E5%AD%B8%E5%AE%B6/692811862993367
+2026-10-19 10:24:54 [DEBUG  ] research.search   [filter] 丢弃(too_short): https://zhuanlan.zhihu.com/p/498546751
+2026-10-19 10:24:54 [DEBUG  ] research.search   [q4] 关键词 3 个 → 原始 15 → 去重 15 → 过滤后保留 5
+2026-10-19 10:24:55 [DEBUG  ] research.extract  [extract] https://www.amway.com.tw/iShare/Post/Detail/42643 → 3592 字符 (截断至 6000)
+2026-10-19 10:24:56 [DEBUG  ] research.extract  [extract] https://www.joybuy.de/blog/optimum-nutrition-gold-standard-guide/jgKprvFq → 2638 字符 (截断至 6000)
+2026-10-19 10:24:57 [DEBUG  ] research.extract  [extract] https://tw.iherb.com/blog/types-of-protein-powder-from-whey-to-vegan/171 → 6000 字符 (截断至 6000)
+2026-10-19 10:25:00 [DEBUG  ] research.extract  [extract] https://www.myprotein.cn/blog/supplements/difference-in-protein-powders → 3498 字符 (截断至 6000)
+2026-10-19 10:25:01 [DEBUG  ] research.extract  [extract] https://www.thinkusadairy.org/Documents/Microsites/Chinese/cn_2019%20US%20Dairy%20Proteins.PDF → 6000 字符 (截断至 6000)
+2026-10-19 10:25:01 [INFO   ] research.extract  网页抓取: 5/5 页成功获得正文
+2026-10-19 10:25:01 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:25:03 [DEBUG  ] research.llm      响应: 1753 字符 | {   "evidence": [     {       "claim": "乳清蛋白含有關鍵的支鏈胺基酸（BCAA），有助於合成肌肉以及運動後修復。",       "evidence_text": "乳清蛋白（Whey Protein）是製造起司的一種副產品。起司製造過程中，牛奶會經過加工，分
+2026-10-19 10:25:03 [DEBUG  ] research.evidence [q4] https://www.amway.com.tw/iShare/Post/Detail/42643 提取 5 条: 乳清蛋白含有關鍵的支鏈胺基酸（BCAA），有助於合成肌肉以及運動後修復。 | 酪蛋白結構分子比乳清蛋白更大，吸收速度較慢，能緩慢釋放胺基酸。 | 濃縮乳清蛋白加工少、價格便宜且保留牛奶天然營養，但缺點是不適合乳糖不耐症者或吃乳 | 分離乳清蛋白最大程度去除乳糖與脂肪並提升蛋白質含量，適合增肌減脂族群，但價格較高 | 植物性蛋白粉的優勢包含脂肪含量極低、適合乳糖不耐症者、心血管健康友善（不含膽固醇
+2026-10-19 10:25:03 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:25:05 [DEBUG  ] research.llm      响应: 1098 字符 | {   "evidence": [     {       "claim": "乳清蛋白消化速度快，能被身体快速吸收，是训练后蛋白补剂的理想之选，能即时支持肌肉恢复。",       "evidence_text": "乳清蛋白 (Whey Protein)： 这种蛋白质能够被身体快速吸收。金标 1
+2026-10-19 10:25:05 [DEBUG  ] research.evidence [q4] https://www.joybuy.de/blog/optimum-nutrition-gold-standard-g 提取 3 条: 乳清蛋白消化速度快，能被身体快速吸收，是训练后蛋白补剂的理想之选，能即时支持肌肉 | 酪蛋白的消化过程非常缓慢，可持续数小时，具有缓释特性，适合夜间长效补充或两餐之间 | 纯素蛋白粉适合遵循植物性饮食或避免乳制品的运动员，通过融合豌豆和米蛋白等确保了完
+2026-10-19 10:25:05 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:25:07 [DEBUG  ] research.llm      响应: 628 字符 | {   "evidence": [     {       "claim": "乳清蛋白和酪蛋白是完全的高質量蛋白質，其中乳清蛋白消化速度相對較快且富含亮氨酸，酪蛋白消化速度較慢並能更長久地釋放氨基酸。",       "evidence_text": "乳清蛋白和酪蛋白是完全的、高質量的蛋白質。乳
+2026-10-19 10:25:07 [DEBUG  ] research.evidence [q4] https://tw.iherb.com/blog/types-of-protein-powder-from-whey- 提取 2 条: 乳清蛋白和酪蛋白是完全的高質量蛋白質，其中乳清蛋白消化速度相對較快且富含亮氨酸， | 大豆分離蛋白和豌豆蛋白是特高品質的植物蛋白選擇之一。
+2026-10-19 10:25:07 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:25:10 [DEBUG  ] research.llm      响应: 1880 字符 | {   "evidence": [     {       "claim": "乳清蛋白是蛋白粉中最常见的一种，价格便宜且有多种口味，能在训练后快速填充肌肉对蛋白质的需求，是运动后肌肉的最佳补充。",       "evidence_text": "乳清蛋白是蛋白粉中最常见的一种蛋白质类型。它的价格
+2026-10-19 10:25:10 [DEBUG  ] research.evidence [q4] https://www.myprotein.cn/blog/supplements/difference-in-prot 提取 5 条: 乳清蛋白是蛋白粉中最常见的一种，价格便宜且有多种口味，能在训练后快速填充肌肉对蛋 | 酪蛋白消化时间缓慢（2.5~4个小时以上），能持久缓慢释放氨基酸进入血液，适合在 | 植物蛋白（如大豆蛋白和豌豆蛋白）富含氨基酸、维生素、膳食纤维以及抗氧化物，非常适 | 在大豆蛋白中，大豆分离蛋白是唯一能提供成人所需8种必需氨基酸的植物蛋白，完全不含 | 豌豆分离蛋白天然不含麸质、乳糖、胆固醇和其他抗营养因子，是牛奶基础蛋白质很好的替
+2026-10-19 10:25:10 [DEBUG  ] research.llm      请求: model=free-model temp=0.20 messages=1 条 | 最后一条: 你是一名事实核查助手。根据"问题"和下面的"网页正文"，提取与研究问题真正相关的证据 (Evidence)。
+
+要求:
+1. 每条证据包含 4 个字段:
+   claim: 网页正文能够支持的事实性陈...
+2026-10-19 10:25:10 [DEBUG  ] research.llm      响应: 20 字符 | {   "evidence": [] }
+2026-10-19 10:25:10 [DEBUG  ] research.evidence 证据编号: EV-q4-001 ~ EV-q4-015（前缀 'q4-'）
+2026-10-19 10:25:10 [INFO   ] research.flow     [q4] 关键词 3 → 原始结果 15 → 去重后 15 → 过滤后 5 → 有效正文 5 页 → 证据 15 条
+2026-10-19 10:25:10 [DEBUG  ] research.writer   开始写小结: 证据 15 条, 问题: 乳清蛋白、酪蛋白和植物蛋白的优缺点及适用场景对比
+2026-10-19 10:25:10 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究写作助手。根据下面的 EVIDENCE（证据）回答用户问题。
+
+要求:
+1. 只使用 EVIDENCE 中的信息，不得编造证据中没有的内容。
+2. 在支撑某一论断的句子末尾标注所用证据，格...
+2026-10-19 10:25:14 [DEBUG  ] research.llm      响应: 1428 字符 | 根據提供的證據，乳清蛋白、酪蛋白和植物蛋白的優缺点與適用場景對比如下：  * **乳清蛋白**   * **優點**：     * 含有關鍵的支鏈胺基酸（BCAA）與亮胺酸，有助於合成肌肉、運動後修復，並能快速填充肌肉對蛋白質的需求 [EV-q4-001, EV-q4-006, EV-q4-009,
+2026-10-19 10:25:14 [DEBUG  ] research.writer   小结完成: 1428 字符 | 根據提供的證據，乳清蛋白、酪蛋白和植物蛋白的優缺点與適用場景對比如下：  * **乳清蛋白**   * **優點**：     * 含有關鍵的支鏈胺基酸（BCAA）與亮胺酸，有助於合成肌肉、運動後修復，並能快速填充肌肉對蛋白質的需求 [EV-q4-001, EV-q4-006, EV-q4-009,
+2026-10-19 10:25:14 [INFO   ] research.main     [Q4] 完成 ✓（15 条证据）
+2026-10-19 10:25:14 [INFO   ] research.search   共过滤 26 条低质结果（黑名单 8 / 空壳 18 / 低分 0 / 兜底回退 0 次）
+2026-10-19 10:25:14 [INFO   ] research.main     [4/4] Synthesizing Final Answer
+2026-10-19 10:25:14 [DEBUG  ] research.synthesis 全局证据汇总去重: 45 → 45
+2026-10-19 10:25:14 [INFO   ] research.synthesis 开始综合: 4 个子问题 (4 成功 / 0 失败), 去重后证据 45 条
+2026-10-19 10:25:14 [DEBUG  ] research.llm      请求: model=free-model temp=0.30 messages=1 条 | 最后一条: 你是一名研究合著者 (Synthesizer)。用户有一个原始问题，我们先把它拆成若干子问题分别研究，下面是每个子问题的研究小结，以及支撑这些小结的全部 EVIDENCE（证据）。请综合所有子问题的结...
+2026-10-19 10:25:19 [DEBUG  ] research.llm      响应: 2421 字符 | ### 健身期的蛋白质推荐与选择指南  在健身期间，科学合理地摄入蛋白质对于肌肉合成、运动后修复以及增肌减脂至关重要。以下根据各子问题的研究结果，为您综合整理健身期的蛋白质推荐排行与选择方案。  ---  ### 一、 健身期间每日蛋白质摄取量建议 不同健身目标和阶段对应的每日每公斤体重蛋白质摄入量
+2026-10-19 10:25:19 [DEBUG  ] research.synthesis 综合答案原始输出 (2421 字符):
+### 健身期的蛋白质推荐与选择指南
+
+在健身期间，科学合理地摄入蛋白质对于肌肉合成、运动后修复以及增肌减脂至关重要。以下根据各子问题的研究结果，为您综合整理健身期的蛋白质推荐排行与选择方案。
+
+---
+
+### 一、 健身期间每日蛋白质摄取量建议
+不同健身目标和阶段对应的每日每公斤体重蛋白质摄入量建议如下：
+* **日常运动健身族**：每日建议摄取每公斤体重 1.5 至 1.7 公克，亦可依运动目标提高至每公斤体重 1.5 到 2.0 公克不等 [EV-q1-001]。
+* **增肌、维持或质量增加阶段**：
+  * 部分建议为每公斤体重摄入 1.0 至 1.2 克 [EV-q1-002]。
+  * 实用增肌目标或增肌维持阶段则普遍建议每天每公斤体重摄入 1.6 至 2.2 克 [EV-q1-003, EV-q1-004, EV-q3-014]。
+
+---
+
+### 二、 常见健身蛋白质来源及生物价排行
+食物来源的蛋白质吸收利用率可以通过**生物价（BV，反映被机体利用程度的指标，数值越高利用率越高）**来衡量 [EV-q2-003]：
+* **常见食物的蛋白质生物价排行**：
+  1. **鸡蛋**：生物价最高（94%），其蛋白质能被身体最大程度地利用 [EV-q2-005, EV-q2-008]。
+  2. **牛奶**：90% [EV-q2-008]。
+  3. **鱼类**：83% [EV-q2-008]。
+  4. **牛肉与猪肉**：均为 76% [EV-q2-008]。
+  *(注：常见植物或谷物如大米为 77%、玉米 60%、花生 59%、高粱 56%)* [EV-q2-008]。
+* **健身族推荐的天然蛋白质食物**：包含低糖豆浆、希腊优格、天贝、鸡胸肉、猪后腿瘦肉、鮭鱼与虾等 [EV-q2-001]。卫福部国民健康署的「豆鱼蛋肉类」分类也暗示了推荐选择顺序为：豆类 > 海鲜 > 蛋 > 肉类 [EV-q2-002]。
+
+---
+
+### 三、 不同蛋白质补剂（乳清、酪蛋白、植物蛋白）的优缺点与适用场景
+针对健身补剂，不同的类型具备各自的优缺点与对应的适用场景：
+
+1. **乳清蛋白**
+   * **优点**：消化吸收速度快，含有关键的支链氨基酸（BCAA）与亮氨酸，有助於合成肌肉、运动后修復并即时支援肌肉需求 [EV-q4-001, EV-q4-006, EV-q4-009, EV-q4-011]。常见且价格便宜、口味丰富 [EV-q4-011]。
+     * *浓缩乳清蛋白*：加工最少、价格便宜、保留牛奶天然营养 [EV-q4-003]。
+     * *分离乳清蛋白*：最大程度去除乳糖与脂肪，蛋白质含量最高（85% 以上） [EV-q3-008, EV-q4-004]。
+   * **缺点**：浓缩乳清不适合乳糖不耐症者或吃乳製品会长痘痘的人 [EV-q4-003]；分离乳清制作繁琐、整体价格较高 [EV-q4-004]。
+   * **适用场景**：训练后的黄金30分钟内作为快速补充与即时支持肌肉恢復的理想选择 [EV-q3-009, EV-q4-006, EV-q4-011]。
+
+2. **酪蛋白**
+   * **优点**：分子结构大，消化吸收非常缓慢（可持续 2.5 至 4 小时以上），具备缓释特性，能持久且缓慢地释放氨基酸进入血液，属于完全的高质量蛋白质 [EV-q4-002, EV-q4-007, EV-q4-009, EV-q4-012]。
+   * **适用场景**：适合夜间长效补充、两餐之间的营养衔接，或临睡前使用以保证夜间源源不断供给蛋白质和氨基酸（又称睡前缓释蛋白） [EV-q4-007, EV-q4-012]。
+
+3. **植物蛋白（如大豆蛋白、豌豆蛋白等）**
+   * **优点**：脂肪含量极低、不含胆固醇（心血管健康友善）、环境友善（碳足迹低），天然不含乳糖与麸质 [EV-q4-005, EV-q4-014, EV-q4-015]。大豆分离蛋白是唯一能提供成人所需 8 种必需氨基酸的植物蛋白，且富含抗氧化的大豆异黄酮 [EV-q4-014]；通过融合豌豆和米蛋白等可确保完整的氨基酸谱 [EV-q4-008]。
+   * **缺点**：氨基酸含量和消化率会因具體配方而异 [EV-q4-010]。
+   * **适用场景**：适合素食主义者、严格素食者、乳糖不耐症者、对乳製品敏感或高乳糖过敏的人群作为牛奶基础蛋白的优质替代方案 [EV-q4-005, EV-q4-013, EV-q4-015]。
+
+---
+
+### 四、 不同健身阶段如何选择蛋白质补剂
+根据个人所处的健身阶段和身体状况，选择蛋白粉的策略如下：
+* **新手增肌期（如训练 3-6 个月）**：训练强度中等，不需要追求极致纯度，建议选择性价比更高、蛋白含量在 70%-80% 的**浓缩乳清蛋白**，优先保证口味和坚持度 [EV-q3-007, EV-q3-012]。
+* **增肌突破期（如训练 1-2 年、高强度训练）**：进入瓶颈期后需要更高的纯度和吸收效率，建议选择蛋白含量在 85% 以上的**分离乳清蛋白粉**，以避免额外热量干扰 [EV-q3-008]。
+* **减脂控体重期**：核心诉求是低糖、低脂、高纯度，建议选择**分离乳清**或**水解乳清**来防止肌肉流失并控制总热量 [EV-q3-009]；若不希望摄取乳清蛋白相对较高的热量或有乳糖不耐症，**EAA（必需氨基酸）**也是合适的补充品 [EV-q3-003]。
+* **乳糖不耐受人群**：喝完普通蛋白粉容易胀气、腹泻的人群，建议选择乳糖极低或不含乳糖的**分离乳清**、**水解乳清**或**植物蛋白**，以减少肠胃负担 [EV-q3-11, EV-q4-005]。
+2026-10-19 10:25:19 [WARNING] research.cite     抹掉 1 处无法解析的 EV 引用（LLM 未按证据 ID 引用）
+2026-10-19 10:25:19 [DEBUG  ] research.cite     引用格式化: 16 个来源, 输出 3881 字符
+2026-10-19 10:25:19 [INFO   ] research.main     Final Answer 已生成（3881 字符）
+2026-10-19 10:25:19 [DEBUG  ] research.main     Final Answer 全文:
+### 健身期的蛋白质推荐与选择指南
+
+在健身期间，科学合理地摄入蛋白质对于肌肉合成、运动后修复以及增肌减脂至关重要。以下根据各子问题的研究结果，为您综合整理健身期的蛋白质推荐排行与选择方案。
+
+---
+
+### 一、 健身期间每日蛋白质摄取量建议
+不同健身目标和阶段对应的每日每公斤体重蛋白质摄入量建议如下：
+* **日常运动健身族**：每日建议摄取每公斤体重 1.5 至 1.7 公克，亦可依运动目标提高至每公斤体重 1.5 到 2.0 公克不等 [1]。
+* **增肌、维持或质量增加阶段**：
+  * 部分建议为每公斤体重摄入 1.0 至 1.2 克 [2]。
+  * 实用增肌目标或增肌维持阶段则普遍建议每天每公斤体重摄入 1.6 至 2.2 克 [3][4][12]。
+
+---
+
+### 二、 常见健身蛋白质来源及生物价排行
+食物来源的蛋白质吸收利用率可以通过**生物价（BV，反映被机体利用程度的指标，数值越高利用率越高）**来衡量 [6]：
+* **常见食物的蛋白质生物价排行**：
+  1. **鸡蛋**：生物价最高（94%），其蛋白质能被身体最大程度地利用 [7][8]。
+  2. **牛奶**：90% [8]。
+  3. **鱼类**：83% [8]。
+  4. **牛肉与猪肉**：均为 76% [8]。
+  *(注：常见植物或谷物如大米为 77%、玉米 60%、花生 59%、高粱 56%)* [8]。
+* **健身族推荐的天然蛋白质食物**：包含低糖豆浆、希腊优格、天贝、鸡胸肉、猪后腿瘦肉、鮭鱼与虾等 [5]。卫福部国民健康署的「豆鱼蛋肉类」分类也暗示了推荐选择顺序为：豆类 > 海鲜 > 蛋 > 肉类 [5]。
+
+---
+
+### 三、 不同蛋白质补剂（乳清、酪蛋白、植物蛋白）的优缺点与适用场景
+针对健身补剂，不同的类型具备各自的优缺点与对应的适用场景：
+
+1. **乳清蛋白**
+   * **优点**：消化吸收速度快，含有关键的支链氨基酸（BCAA）与亮氨酸，有助於合成肌肉、运动后修復并即时支援肌肉需求 [13][14][15][16]。常见且价格便宜、口味丰富 [16]。
+     * *浓缩乳清蛋白*：加工最少、价格便宜、保留牛奶天然营养 [13]。
+     * *分离乳清蛋白*：最大程度去除乳糖与脂肪，蛋白质含量最高（85% 以上） [11][13]。
+   * **缺点**：浓缩乳清不适合乳糖不耐症者或吃乳製品会长痘痘的人 [13]；分离乳清制作繁琐、整体价格较高 [13]。
+   * **适用场景**：训练后的黄金30分钟内作为快速补充与即时支持肌肉恢復的理想选择 [11][14][16]。
+
+2. **酪蛋白**
+   * **优点**：分子结构大，消化吸收非常缓慢（可持续 2.5 至 4 小时以上），具备缓释特性，能持久且缓慢地释放氨基酸进入血液，属于完全的高质量蛋白质 [13][14][15][16]。
+   * **适用场景**：适合夜间长效补充、两餐之间的营养衔接，或临睡前使用以保证夜间源源不断供给蛋白质和氨基酸（又称睡前缓释蛋白） [14][16]。
+
+3. **植物蛋白（如大豆蛋白、豌豆蛋白等）**
+   * **优点**：脂肪含量极低、不含胆固醇（心血管健康友善）、环境友善（碳足迹低），天然不含乳糖与麸质 [13][16]。大豆分离蛋白是唯一能提供成人所需 8 种必需氨基酸的植物蛋白，且富含抗氧化的大豆异黄酮 [16]；通过融合豌豆和米蛋白等可确保完整的氨基酸谱 [14]。
+   * **缺点**：氨基酸含量和消化率会因具體配方而异 [15]。
+   * **适用场景**：适合素食主义者、严格素食者、乳糖不耐症者、对乳製品敏感或高乳糖过敏的人群作为牛奶基础蛋白的优质替代方案 [13][16]。
+
+---
+
+### 四、 不同健身阶段如何选择蛋白质补剂
+根据个人所处的健身阶段和身体状况，选择蛋白粉的策略如下：
+* **新手增肌期（如训练 3-6 个月）**：训练强度中等，不需要追求极致纯度，建议选择性价比更高、蛋白含量在 70%-80% 的**浓缩乳清蛋白**，优先保证口味和坚持度 [11][12]。
+* **增肌突破期（如训练 1-2 年、高强度训练）**：进入瓶颈期后需要更高的纯度和吸收效率，建议选择蛋白含量在 85% 以上的**分离乳清蛋白粉**，以避免额外热量干扰 [11]。
+* **减脂控体重期**：核心诉求是低糖、低脂、高纯度，建议选择**分离乳清**或**水解乳清**来防止肌肉流失并控制总热量 [11]；若不希望摄取乳清蛋白相对较高的热量或有乳糖不耐症，**EAA（必需氨基酸）**也是合适的补充品 [10]。
+* **乳糖不耐受人群**：喝完普通蛋白粉容易胀气、腹泻的人群，建议选择乳糖极低或不含乳糖的**分离乳清**、**水解乳清**或**植物蛋白**，以减少肠胃负担 [13]。
+
+## 引用
+[1] 健身工廠 | Blog
+URL: https://www.fitnessfactory.com.tw/tw/blog/%E5%81%A5%E4%BA%BA%E7%9A%84%E7%87%9F%E9%A4%8A%E5%AD%B8/%E9%8D%9B%E9%8D%8A%E5%BE%8C%E7%B0%A1%E5%96%AE%E8%A3%9C%E5%85%85%E8%9B%8B%E7%99%BD%E8%B3%AA%E4%BD%A0%E8%A6%81%E7%9A%84%E8%9B%8B%E7%99%BD%E8%B3%AA%E5%BF%83%E6%B3%95%E9%83%BD%E5%9C%A8%E9%80%99
+[2] 营养元素计算器 | 轻松了解每日所需的营养 - Myprotein中国
+URL: https://www.myprotein.cn/blog/nutrition/macro-calculator-how-to-calculate-macros-iifym
+[3] 增肌需要多少蛋白质？每日目标 | Gainflow
+URL: https://www.gainflow.app/zh/blog/zengji-xuyao-duoshao-danbaizhi
+[4] 增肌需要多少蛋白质：实用指南 | WorkoutGen 博客
+URL: https://workoutgen.app/zh/articles/protein-intake-muscle-growth-guide
+[5] 想增肌減脂【蛋白質食物】建議這樣吃！常見的蛋白質疑問一次解答。 | Vogue Taiwan
+URL: https://www.vogue.com.tw/beauty/article/%E8%9B%8B%E7%99%BD%E8%B3%AA%E9%A3%9F%E7%89%A9
+[6] 蛋白粉和食物蛋白有什么不同，到底健身需不需要吃蛋白粉
+URL: https://m.thepaper.cn/baijiahao_11405597
+[7] “高蛋白食物”排行榜，鸡蛋牛奶靠边站，鱼肉排第四 - QQ News
+URL: https://news.qq.com/rain/a/20251028A01EA300
+[8] 蛋白质及营养价值 - 自然科学网
+URL: http://www.zrkxw.com/ReadContent.php?id=80
+[9] 增肌減脂怎麼做才正確？飲食菜單、運動安排、常見迷思與問題解答
+URL: https://www.marstw.com/blog/posts/muscle-gain-and-fat-loss
+[10] 增肌減脂神隊友？11種健身營養補充品介紹 - Ashlee咻咻
+URL: https://ashleexiu.com/fitness-nutrition
+[11] 不同健身人群怎么选蛋白粉？FoYes类型匹配不踩坑_凤凰网
+URL: https://baby.ifeng.com/c/8vIV9uOU9Bs
+[12] 2026不同人群蛋白粉怎么选？FoYes按训练阶段讲清
+URL: https://www.cnblogs.com/newzq2/p/22186862
+[13] 乳清蛋白、植物蛋白、酪蛋白差在哪？一次選對適合你的蛋白粉 - iShare 數位內容中心
+URL: https://www.amway.com.tw/iShare/Post/Detail/42643
+[14] Optimum Nutrition金标蛋白粉指南：乳清、酪蛋白与植物蛋白对比
+URL: https://www.joybuy.de/blog/optimum-nutrition-gold-standard-guide/jgKprvFq
+[15] 蛋白質粉種類：從乳清蛋白到植物蛋白指南 | 健康中心
+URL: https://tw.iherb.com/blog/types-of-protein-powder-from-whey-to-vegan/171
+[16] 补充蛋白质的正确姿势| 你真的选对蛋白粉了吗？ - MYPROTEIN™
+URL: https://www.myprotein.cn/blog/supplements/difference-in-protein-powders

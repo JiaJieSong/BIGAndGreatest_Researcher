@@ -9,6 +9,36 @@ from urllib.parse import quote, urlparse, urlunparse
 
 # ------------------------- 配置 -------------------------
 
+import functools
+import time
+
+def trace(func):
+    """通用 I/O 追踪装饰器：打印入参、出参及执行耗时，自动截断过长文本"""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # 1. 格式化并截断入参
+        def _truncate(val, max_len=120):
+            s = repr(val)
+            return s[:max_len] + f"...(共{len(s)}字)" if len(s) > max_len else s
+
+        args_repr = [_truncate(a) for a in args]
+        kwargs_repr = [f"{k}={_truncate(v)}" for k, v in kwargs.items()]
+        signature = ", ".join(args_repr + kwargs_repr)
+
+        print(f"\n👉 [CALL] {func.__name__}({signature})")
+        
+        start_time = time.perf_counter()
+        try:
+            result = func(*args, **kwargs)
+            elapsed = time.perf_counter() - start_time
+            print(f"✅ [RETURN] {func.__name__} ({elapsed:.2f}s) -> {_truncate(result)}")
+            return result
+        except Exception as e:
+            elapsed = time.perf_counter() - start_time
+            print(f"❌ [EXCEPTION] {func.__name__} ({elapsed:.2f}s) -> 抛出异常: {e}")
+            raise
+    return wrapper
+
 AI_BASE_URL = ""   # 在 load_dotenv() 后按顺序赋值
 AI_API_KEY = ""
 AI_MODEL = ""
@@ -216,7 +246,7 @@ class _TextExtractor(html.parser.HTMLParser):
         lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
         return "\n".join(lines)
 
-
+@trace
 def fetch_page(url: str) -> str:
     """GET 抓取网页，返回响应的文本内容（自动解码字符集）。"""
     req = urllib.request.Request(
@@ -231,7 +261,7 @@ def fetch_page(url: str) -> str:
     charset = (resp.headers.get_content_charset() or "utf-8")
     return raw.decode(charset, errors="replace")
 
-
+@trace
 def extract_webpage(url: str) -> str:
     """Extract 步骤：抓取单个 URL 的网页正文，截断到 EXTRACT_MAX_CHARS。"""
     html_text = fetch_page(url)
@@ -239,7 +269,7 @@ def extract_webpage(url: str) -> str:
     body.feed(html_text)
     return body.extract()[:EXTRACT_MAX_CHARS]
 
-
+@trace
 def normalize_ascii_url(url: str) -> str:
     """把 URL 路径和查询参数里的中文、空格、特殊字符转为百分号编码，重新拼成完整 URL。
 
@@ -343,6 +373,7 @@ def _dedup_evidence(evidence_list: list[dict]) -> list[dict]:
     return unique
 
 
+@trace
 def extract_evidence_from_page(question: str, page: dict) -> list[dict]:
     """Evidence Extraction：对单页抽取证据，返回 list[dict]（不含 id，未分配）。
 
