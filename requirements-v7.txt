@@ -1,0 +1,7 @@
+# Research Agent V7 依赖（在 requirements-v6.txt 之上追加）
+# langgraph 1.2.x：StateGraph / START / END / Send / Command / Overwrite
+# reportlab：PDF 输出（中文字体 UnicodeCIDFont("STSong-Light")）
+# python-docx：DOCX 输出
+langgraph>=1.2.0,<2.0
+reportlab>=4.0
+python-docx>=1.1

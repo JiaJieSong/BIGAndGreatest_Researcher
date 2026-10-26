@@ -12,7 +12,8 @@ research_v2：在v1基础上加Evidence Extraction。Extract/Clean Article → E
 research_v3：在v2基础上加Planner + Synthesis。用户问题 → Planner(拆子问题) → 每个子问题独立 Research(Search → Extract → Evidence → Summary) → Synthesis(综合各子问题结果回答原问题)
 research_v4：在v3基础上加 Research State + Gap Analyzer + Replanner，从「一次性执行研究计划」进化为「根据研究结果动态调整计划」：Planner 初始计划 → Research Loop(更新 Research State) → Gap Analysis(发现证据缺口/矛盾) → 继续则生成 Follow-up Questions 再研究，否则 Synthesis → Citation Validation → Final Report（已实现）
 research_v5：在v4基础上加 Citation System（引用追踪链）。Research Loop 中页面正文注册进 Source Registry、证据经 Evidence Registry 登记（quote 对正文验证 + 关联 source_id）→ Synthesis 输出结构化结论（claims JSON，程序校验）→ Citation Validator 五级检查（ID/URL/Quote/语义/冲突）→ Citation Renderer 程序渲染最终报告，Claim → Evidence → Source → 原文全链可追溯（已实现）
-research_v6：待规划
+research_v6：在v5基础上加 LangGraph 工作流编排。保留 V5 全部研究能力与引用系统，把 V4 的手动 Research Loop 重构为 LangGraph StateGraph 驱动的工作流：START → plan_node → research_round_node → gap_analysis_node →（条件路由）→ 继续则 replan_node 回环 / 停止则 finalize_node → END（已实现）
+research_v7：在v6基础上加 Multi-Agent。V5 业务核心 + V6 LangGraph 编排升级为多角色协作：Planner → Chief Researcher（并行派发 Researcher ×N）→ Analyst（reducer 汇合）→（研究循环）→ Reviewer（质检打回）→ Writer → Publisher（md/pdf/docx 三产物）（已实现）
 
 ## 配置
 
@@ -34,7 +35,11 @@ research_v6：待规划
 - `_test_v4_state.py` — V4 单元测试：ResearchState / GapAnalyzer / Replanner（mock LLM，不联网）
 - `_test_v4_dryrun.py` — V4 端到端离线 dry-run（mock LLM/搜索/抓取，不联网）
 - `_test_v5_citation.py` — V5 Phase G 验收测试：Citation System 12 项覆盖（mock LLM/搜索/抓取，离线可重复）
-- 后续版本的 `research_v6.py` 及配套测试，实现后再补进此清单
+- `research_v6.py` — V6：导入 V5 全部业务函数，LangGraph StateGraph 工作流编排（依赖 `langgraph`，见 `requirements-v6.txt`）
+- `_test_v6_workflow.py` — V6 验收测试：工作流编译/完整运行/全部停止条件/跨轮注册表一致性/节点重复执行不重复登记/渲染回归（mock 外部调用，离线可重复）
+- `research_v7/` — V7 Multi-Agent 包：`state.py`（V7State + reducer + 新配置）/ `agents.py`（7 角色节点）/ `graph.py`（构图 + run_research）/ `main.py`（CLI REPL，`python -m research_v7`）；依赖见 `requirements-v7.txt`
+- `_test_v7_phase2.py` / `_test_v7_phase4.py` / `_test_v7_phase5.py` — V7 分阶段验收测试（mock 外部调用，离线可重复）
+- `v7_DESIGN.md` — V7 Phase 1 设计说明（状态表 / 节点 callsite / 边路由 / 并发安全 / 疑问清单）
 
 ## v1 基础管线
 
@@ -210,11 +215,6 @@ Extract → Evidence → Summary）直接复用 V3，未复制一套 Search/Extr
 - 引用机制沿用 V3（`[EV-xxx]` → `[n]`、同源同号、非法 ID 抹除），
   新增 `validate_citations` 在转编号前输出引用质量指标
 
-### 运行
-
-```bash
-python research_v4.py
-```
 
 ### 测试
 
@@ -250,6 +250,7 @@ Search/Extract/Evidence 代码。
             → Evidence Extraction → Summary
                         ↓
         Source Registry 登记页面正文（SRC-xxx）
+        
       （canonical_url 去重 / 保存正文版本 page_versions）
                         ↓
       Evidence Registry 登记证据（EV-xxx，全局唯一）
@@ -334,11 +335,6 @@ Search/Extract/Evidence 代码。
 - 校验失败不阻断研究：渲染时抹掉无法追溯的引用并计数，结论如实降级
   （unsupported / needs_review），最终在质量说明中披露
 
-### 运行
-
-```bash
-python research_v5.py
-```
 
 ### 测试
 
@@ -350,9 +346,166 @@ python _test_v5_citation.py   # Phase G 验收测试：12 项（mock 全部外�
 语义不符被标记 / 首轮证据进最终报告 / 多结论共享来源 / 重复来源不重复列 /
 跨来源矛盾不被覆盖 / 编号全部映射 References / 校验失败不静默 / 搜索抓取失败不虚构引用。
 
-## v6（待规划）
+## v6 加 LangGraph StateGraph 工作流编排
 
-预留章节，规划确定后在此补充：定位一句话 → 流程 → 新增点 → 运行 / 测试。
+核心变化一句话：V5 的 Research Loop 是手写 `while` 循环；V6 把「研究 → 缺口分析 →
+重规划 → 继续/停止」的循环控制交给 LangGraph StateGraph，节点与边显式表达工作流，
+循环由条件路由驱动，停止条件仍是 V5 那套规则 —— 不重写任何研究/引用功能。
+
+`research_v6.py` 已实现：导入 `research_v5` 的全部业务函数（Planner / Research /
+Gap Analyzer / Replanner / Synthesis / Citation Validator / Citation Renderer /
+两个注册表），不复制一套实现。
+
+### 推荐流程
+
+```text
+                Original Question
+                        ↓
+              [1/3] Understanding Question
+                        ↓
+              START → plan_node（Planner + 创建 ResearchState）
+                        ↓
+              research_round_node（单轮串行研究 pending 问题）
+              （Search → Extract → Evidence → Source Registry
+                → Evidence Registry → Update Research State）
+                        ↓
+              gap_analysis_node（analyze_gaps → 缺口 / 冲突 / 充分性）
+                        ↓
+              route_research（条件路由，add_conditional_edges）
+              ├─ 继续 → replan_node（生成 Follow-up 入队）
+              │        → route_after_replan
+              │           ├─ 有 Follow-up → 回到 research_round_node（第 N+1 轮）
+              │           └─ 无 Follow-up（no_valid_followups）→ finalize_node
+              └─ 停止（sufficient / no_new_evidence / max_rounds）
+                        → finalize_node → END
+```
+
+### 五个 Graph 节点
+
+1. **plan_node**：接收原始问题，调用 V5 `plan_research()`，创建 `ResearchState`（含
+   两个注册表），初始化运行级统计（filter_stats 等）
+2. **research_round_node**：读取 `ResearchState`，串行研究本轮 pending 问题（调用
+   V5 `research_sub_question`），更新搜索历史 / 已完成问题 / 证据 / 轮次 / 缺口；
+   记录本轮新增证据数；单子问题失败沿用 V5 容错
+3. **gap_analysis_node**：调用 V5 `analyze_gaps()`，更新缺口/冲突/充分性；GapReport
+   存入 graph runtime 供路由只读
+4. **replan_node**：调用 V5 `replan()`（已直接入队 Follow-up，不重复添加）；无有效
+   产出时 `stop("no_valid_followups")`
+5. **finalize_node**：V5 Synthesis（含 Claim–Evidence Mapping）→ Citation Validator
+   （五级校验 + 二次核验）→ Citation Renderer（编号/追溯表/References/质量说明）
+
+### 停止条件（唯一来源 = V5 规则）
+
+`route_research` 调用 V5 `_stop_reason()`（sufficient / no_new_evidence / max_rounds）；
+`replan_node` 无有效 Follow-up 时停止（no_valid_followups）。LangGraph 另有
+`recursion_limit=500` 作为图级安全网（V5 的 `MAX_ROUNDS=3` 才是业务上限）。
+
+### 状态模型要点
+
+- Graph State（TypedDict）含 `original_question` / `state`（ResearchState 实例）/
+  `runtime`（filter_stats、每轮新增证据等运行级数据）/ `final_answer` / `error`
+- 全图只有**一个** `ResearchState` 实例（含 SourceRegistry / EvidenceRegistry），
+  节点原地修改后返回完整图状态 —— 不复制注册表、不在节点里重建状态，所以
+  source_id / evidence_id 跨轮连续分配、证据只增不减
+- 节点返回整份 graph state（LangGraph 1.x 中节点返回 dict 是**全量替换**而非合并，
+  返回整份状态才能保证字段跨节点累积）
+- 当前图状态**不可直接序列化**（`state` 是带注册表/正文版本的 ResearchState 对象，
+  runtime 含 GapReport）。本阶段是内存工作流；未来引入 Checkpointer 持久化时，
+  需要为 ResearchState 设计序列化方案（正文版本可存盘、LLM 输出缓存等），
+  **目前未实现任何持久化能力**。
+
+
+### 测试
+
+```bash
+python _test_v5_citation.py   # V5 回归（应全部通过）
+python _test_v6_workflow.py   # V6 工作流：编译/完整流程/5 种停止条件/注册表一致性/渲染回归
+```
+
+## v7 加 Multi-Agent（并行 Researcher + Reviewer 质检）
+
+核心变化一句话：V6 的 LangGraph 编排是**单线程**（研究循环内逐题串行）；
+V7 引入多 Agent 角色协作 —— Chief Researcher 并行派发多个 Researcher，
+Analyst 汇合结果，Reviewer 质检打回，Writer / Publisher 产出多格式报告。
+V5 业务核心（研究 / 引用 / 渲染）零重写，只在两个注册表上加锁支持并发。
+
+### 推荐流程
+
+```text
+                Original Question
+                        ↓
+              START → planner_node（Planner + 创建 ResearchState）
+                        ↓
+              chief_researcher_node（唯一决策点）
+              ├─ 有任务 → Command(goto=[Send×k]) 并行派发
+              │        → researcher_node ×k（[R1]..[Rk]，各带局部 stats）
+              │        →（正常边 = super-step barrier）→ analyst_node
+              │          （reducer 汇合，串行重放 complete/add_evidence/
+              │           record_searches/resolve_gap → gap 分析 + replan）
+              │        → 回 chief（下一波 / 停止判定）
+              └─ 研究结束 → reviewer_node
+                          ├─ pass → writer_node
+                          ├─ fail 且打回 ≤ MAX_REVIEW_CYCLES → chief（整改回环）
+                          └─ fail 且超上限 → writer（问题清单如实披露）
+                                    ↓
+                     writer_node（Synthesis → 五级校验 → Render）
+                                    ↓
+                     publisher_node（output/<slug>-<ts>/: md / pdf / docx）
+                                    ↓
+                                  END
+```
+
+### 七个角色节点
+
+1. **planner_node**：V5 `plan_research()` → 创建唯一 ResearchState（含注册表）
+2. **chief_researcher_node**：唯一决策点 —— V5 `_stop_reason()` 语义；
+   弹出 ≤`MAX_PARALLEL_RESEARCHERS` 个任务用 `Command(goto=[Send×k])` 并行派发；
+   Reviewer 打回的 evidence 类 issue 转 `source="reviewer"` 任务重新研究
+3. **researcher_node ×N（并行）**：V5 `research_sub_question()` 原样调用，
+   只写 reducer 字段 `researcher_reports`；日志前缀 `[R1]..[Rk]` 交错可见
+4. **analyst_node（串行）**：reducer 汇合后重放 `complete_question` /
+   `add_evidence` / `record_searches` / `resolve_gap` → gap 分析 + replan
+5. **reviewer_node**：新增评审 prompt（材料 = 子问题完成度/证据/缺口/冲突），
+   输出 JSON `{verdict: pass|fail, issues: [{type, description}]}`；
+   evidence 类 issue 触发整改回环，clarity/conflict 类只披露
+6. **writer_node**：V5 `synthesize_from_state()` → `validate_citation_chain()` →
+   `render_report()`；review_notes 追加为「评审问题清单」
+7. **publisher_node**：写 `output/<slug>-<yyyymmdd-hhmm>/` 下
+   `report.md` / `report.pdf` / `report.docx`（PDF 用 reportlab
+   `UnicodeCIDFont("STSong-Light")`，DOCX 用 python-docx）
+
+### 并发安全
+
+- 并行 Researcher 各自局部 `stats`，绝不同享 filter_stats dict
+- 两个注册表加 `threading.Lock()`（v5 唯一改动）：`SourceRegistry.register` 与
+  `EvidenceRegistry.register` 用 `with self._lock:` 包裹整个注册（counter 自增 +
+  dict 读改写原子化）；`register_from_llm` 不经锁（其全部写路径走 register，
+  避免非重入锁自死锁）—— 串行调用行为零变化
+- `researcher_reports` 用 `Annotated[list, operator.add]` reducer 合并；
+  消费后以 `Overwrite([])` 重建（`[]` 直接赋值会被 operator.add 当累加项）
+- 并行汇合由正常边 `researcher_node → analyst_node` 保证（super-step barrier），
+  无需额外同步节点
+
+### 新配置
+
+`MAX_PARALLEL_RESEARCHERS=3`（每波并行 Researcher 上限）、
+`MAX_REVIEW_CYCLES=2`（Reviewer 打回上限，超过强制进 Writer 如实披露）、
+`OUTPUT_DIR="output"`（输出根目录）。
+
+### 图级安全网
+
+`recursion_limit=500`（沿用 V6）；研究循环上限 `v5.MAX_ROUNDS=3`；
+Review 打回上限 `MAX_REVIEW_CYCLES=2` —— 三保险防无限循环。
+
+### 测试
+
+```bash
+python _test_v5_citation.py     # V5 回归（应全部通过）
+python _test_v6_workflow.py     # V6 回归（应全部通过）
+python _test_v7_phase2.py       # V7 串行骨架：等价 V6 + 三产物
+python _test_v7_phase4.py       # V7 Reviewer：pass/整改/超上限披露/非evidence只披露
+python _test_v7_phase5.py       # V7 端到端验收：REPL/并行日志/三产物/引用回归/配置
+```
 
 ## 如何新增一个版本
 

@@ -1,0 +1,4 @@
+# Research Agent V6 依赖（在 requirements-v5.txt 之上追加，若无该文件则本文件即全部依赖）
+# langgraph 1.2.x：StateGraph / START / END / add_node / add_edge /
+#   add_conditional_edges / compile / invoke（不含 LangChain，仅 langgraph 本体）
+langgraph>=1.2.0,<2.0

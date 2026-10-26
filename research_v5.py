@@ -30,6 +30,7 @@ import json
 import os
 import re
 import sys
+import threading
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -552,6 +553,7 @@ class SourceRegistry:
         self.sources: dict[str, dict] = {}        # source_id -> 来源元数据（插入序即注册序）
         self._by_canonical: dict[str, str] = {}   # canonical_url -> source_id（去重索引）
         self._counter = 0                         # source_id 分配计数器，只增不减
+        self._lock = threading.Lock()             # V7 并行：注册写路径加锁（见下 register）
 
     # ---- 注册 ----
     def register(self, url: str, title: str = "", page_text: str = "",
@@ -563,6 +565,17 @@ class SourceRegistry:
         - version_id 为 None 表示本次没有可用正文，未创建/未复用任何版本
         - 无效 URL 返回 None（拒绝注册；不抛异常，由调用方按需跳过该来源）
         """
+        # V7 并行：counter 自增 + dict 读改写不是原子的，多个 Researcher
+        # 并行登记时必须串行化整个注册（串行调用行为不变 —— 锁无副作用）
+        with self._lock:
+            return self._register(url=url, title=title, page_text=page_text,
+                                  published_at=published_at,
+                                  retrieved_at=retrieved_at)
+
+    def _register(self, url: str, title: str = "", page_text: str = "",
+                  published_at: str = "",
+                  retrieved_at: str | None = None) -> dict | None:
+        """register() 的加锁实现（原方法体，逻辑不变）。"""
         raw_url = (url or "").strip()
         if not raw_url:
             return None
@@ -794,6 +807,7 @@ class EvidenceRegistry:
         self.evidence: dict[str, dict] = {}      # evidence_id -> 证据
         self._by_key: dict[tuple[str, str], str] = {}  # (source_id, norm claim) -> ID
         self._counter = 0                        # evidence_id 分配计数器，只增不减
+        self._lock = threading.Lock()            # V7 并行：注册写路径加锁（见下 register）
 
     # ---- 登记 ----
     def register(self, source_id: str, claim: str, quote: str,
@@ -807,6 +821,24 @@ class EvidenceRegistry:
         source_id 不存在、claim/quote 为空时拒绝（返回 None），绝不登记
         无法回溯来源的证据。
         """
+        # V7 并行：counter 自增 + dict 读改写不是原子的，多个 Researcher
+        # 并行登记时必须串行化整个注册（串行调用行为不变 —— 锁无副作用）。
+        # 注意：register_from_llm 也走本方法，锁覆盖其全部写路径。
+        with self._lock:
+            return self._register(source_id=source_id, claim=claim, quote=quote,
+                                  version_id=version_id, context=context,
+                                  locator=locator,
+                                  extraction_method=extraction_method,
+                                  quote_verified=quote_verified,
+                                  round_no=round_no, question_id=question_id)
+
+    def _register(self, source_id: str, claim: str, quote: str,
+                  version_id: str = "", context: str = "",
+                  locator: dict | None = None,
+                  extraction_method: str = "llm_extractive",
+                  quote_verified: bool = False,
+                  round_no: int = 0, question_id: str = "") -> dict | None:
+        """register() 的加锁实现（原方法体，逻辑不变）。"""
         source = self.source_registry.get(source_id) if source_id else None
         if source is None:
             _log(f"      [evidence] 拒绝登记: source_id 不存在 ({source_id!r})")
