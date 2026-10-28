@@ -1,0 +1,5 @@
+GitHub About description
+An iterative deep-research agent with evidence extraction, traceable citations, LangGraph orchestration, and multi-agent review.
+
+Suggested Topics
+ai-agent, deep-research, langgraph, multi-agent, llm, python, research-agent, citation
