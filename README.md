@@ -7,13 +7,13 @@ Research Agent
 
 ## 版本一览
 
-research_v1 : 用户问题 → LLM → Search API → 得到 5 个 URL → Extract → 得到网页正文 → LLM → 答案
-research_v2：在v1基础上加Evidence Extraction。Extract/Clean Article → Evidence Extraction → Evidence List →  LLM → 答案
-research_v3：在v2基础上加Planner + Synthesis。用户问题 → Planner(拆子问题) → 每个子问题独立 Research(Search → Extract → Evidence → Summary) → Synthesis(综合各子问题结果回答原问题)
-research_v4：在v3基础上加 Research State + Gap Analyzer + Replanner，从「一次性执行研究计划」进化为「根据研究结果动态调整计划」：Planner 初始计划 → Research Loop(更新 Research State) → Gap Analysis(发现证据缺口/矛盾) → 继续则生成 Follow-up Questions 再研究，否则 Synthesis → Citation Validation → Final Report（已实现）
-research_v5：在v4基础上加 Citation System（引用追踪链）。Research Loop 中页面正文注册进 Source Registry、证据经 Evidence Registry 登记（quote 对正文验证 + 关联 source_id）→ Synthesis 输出结构化结论（claims JSON，程序校验）→ Citation Validator 五级检查（ID/URL/Quote/语义/冲突）→ Citation Renderer 程序渲染最终报告，Claim → Evidence → Source → 原文全链可追溯（已实现）
-research_v6：在v5基础上加 LangGraph 工作流编排。保留 V5 全部研究能力与引用系统，把 V4 的手动 Research Loop 重构为 LangGraph StateGraph 驱动的工作流：START → plan_node → research_round_node → gap_analysis_node →（条件路由）→ 继续则 replan_node 回环 / 停止则 finalize_node → END（已实现）
-research_v7：在v6基础上加 Multi-Agent。V5 业务核心 + V6 LangGraph 编排升级为多角色协作：Planner → Chief Researcher（并行派发 Researcher ×N）→ Analyst（reducer 汇合）→（研究循环）→ Reviewer（质检打回）→ Writer → Publisher（md/pdf/docx 三产物）（已实现）
+- research_v1 : 用户问题 → LLM → Search API → 得到 5 个 URL → Extract → 得到网页正文 → LLM → 答案
+- research_v2：在v1基础上加Evidence Extraction。Extract/Clean Article → Evidence Extraction → Evidence List →  LLM → 答案
+- research_v3：在v2基础上加Planner + Synthesis。用户问题 → Planner(拆子问题) → 每个子问题独立 Research(Search → Extract → Evidence → Summary) → Synthesis(综合各子问题结果回答原问题)
+- research_v4：在v3基础上加 Research State + Gap Analyzer + Replanner，从「一次性执行研究计划」进化为「根据研究结果动态调整计划」：Planner 初始计划 → Research Loop(更新 Research State) → Gap Analysis(发现证据缺口/矛盾) → 继续则生成 Follow-up Questions 再研究，否则 Synthesis → Citation Validation → Final Report（已实现）
+- research_v5：在v4基础上加 Citation System（引用追踪链）。Research Loop 中页面正文注册进 Source Registry、证据经 Evidence Registry 登记（quote 对正文验证 + 关联 source_id）→ Synthesis 输出结构化结论（claims JSON，程序校验）→ Citation Validator 五级检查（ID/URL/Quote/语义/冲突）→ Citation Renderer 程序渲染最终报告，Claim → Evidence → Source → 原文全链可追溯（已实现）
+- research_v6：在v5基础上加 LangGraph 工作流编排。保留 V5 全部研究能力与引用系统，把 V4 的手动 Research Loop 重构为 LangGraph StateGraph 驱动的工作流：START → plan_node → research_round_node → gap_analysis_node →（条件路由）→ 继续则 replan_node 回环 / 停止则 finalize_node → END（已实现）
+- research_v7：在v6基础上加 Multi-Agent。V5 业务核心 + V6 LangGraph 编排升级为多角色协作：Planner → Chief Researcher（并行派发 Researcher ×N）→ Analyst（reducer 汇合）→（研究循环）→ Reviewer（质检打回）→ Writer → Publisher（md/pdf/docx 三产物）（已实现）
 
 ## 配置
 
@@ -428,6 +428,41 @@ python _test_v6_workflow.py   # V6 工作流：编译/完整流程/5 种停止�
 V7 引入多 Agent 角色协作 —— Chief Researcher 并行派发多个 Researcher，
 Analyst 汇合结果，Reviewer 质检打回，Writer / Publisher 产出多格式报告。
 V5 业务核心（研究 / 引用 / 渲染）零重写，只在两个注册表上加锁支持并发。
+
+### 运行（怎么启动）
+
+```bash
+# 1) 安装依赖
+python -m pip install -r requirements-v7.txt
+
+# 2) 配置 .env（复制 .env.example 改名即可；缺 key 启动时会提示并退出）
+#    AI_BASE_URL / AI_API_KEY / AI_MODEL      —— LLM 端点
+#    RESEARCH_BASE_URL / RESEARCH_API_KEY      —— 搜索 API
+
+# 3) 启动
+python -m research_v7
+```
+
+Windows 下若已建好虚拟环境（本项目 `.venv`），用它的解释器代替 `python`：
+
+```bash
+.venv\Scripts\python.exe -m pip install -r requirements-v7.txt
+.venv\Scripts\python.exe -m research_v7
+```
+
+启动后在 `Q>` 提示符输入问题回车即可，输入 `exit` 退出；也可以直接管道输入：
+
+```
+Q> 2025年人工智能智能体市场规模是多少？
+```
+
+运行结束后产物在 `output/<slug>-<yyyyMMdd-HHmm>/` 目录：
+
+- `report.md` — Markdown 报告
+- `report.pdf` — PDF 报告（reportlab，中文字体 STSong-Light）
+- `report.docx` — Word 报告（python-docx）
+
+> 若于 v7 之前只是要体验单 Agent 版本，各版本单文件直接运行：`python research_v5.py` / `python research_v6.py`。
 
 ### 推荐流程
 
